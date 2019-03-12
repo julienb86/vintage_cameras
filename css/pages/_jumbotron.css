@@ -1,0 +1,11 @@
+.jumbotron {
+  background-color: #F6AE12; }
+  .jumbotron .text-center {
+    color: #04627C; }
+    .jumbotron .text-center h1 {
+      font-size: 3rem;
+      font-weight: bold; }
+    .jumbotron .text-center h2 {
+      font-size: 1.8rem; }
+
+/*# sourceMappingURL=_jumbotron.css.map */

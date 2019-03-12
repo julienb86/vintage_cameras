@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  font-family: 'Old Standard TT', serif; }
+
+.row {
+  margin: 0; }
+
+.container-fluid {
+  padding: 0; }
+  .container-fluid .navbar {
+    background-color: #c78800; }
+    .container-fluid .navbar .nav-link {
+      color: #04627C;
+      text-transform: capitalize; }
+    .container-fluid .navbar .fa-shopping-cart {
+      color: white;
+      font-size: 1.3rem;
+      position: relative; }
+      .container-fluid .navbar .fa-shopping-cart .nav-counter {
+        position: absolute;
+        top: -10px;
+        color: #04627C; }
+
+.products {
+  margin: 0; }
+
+.card {
+  overflow: hidden; }
+  .card img {
+    height: 250px;
+    width: 350px;
+    padding: 10px;
+    opacity: 0.5;
+    transform: scale(1);
+    transition: transform 1s ease; }
+    .card img:hover {
+      transform: scale(1.1);
+      opacity: 1; }
+  .card .card-name h2 {
+    color: black;
+    font-size: 1.2rem;
+    text-transform: uppercase; }
+
+/*# sourceMappingURL=products.css.map */

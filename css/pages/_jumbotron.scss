@@ -1,0 +1,15 @@
+@import "../utils/_variables.scss";
+// JUMBOTRON
+.jumbotron{
+  background-color: $yellow-pale;
+  .text-center{
+    color: $blue-color;
+    h1{
+    font-size: 3rem;
+    font-weight: bold;
+    }
+    h2{
+      font-size: 1.8rem;
+    }
+  }
+}
