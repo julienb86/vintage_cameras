@@ -44,7 +44,7 @@ class DisplayCameras{
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 // fetch the url with the id returned
-  async fetchOneCam(){
+   async fetchOneCam(){
     var id = this.getUrlParams();
     let response = await fetch(url + id);
     let info = await response.json();
@@ -57,18 +57,21 @@ class DisplayCameras{
       let lenses = this.numberOfLenses();
       let html = "";
       let cardHtml =
-        `
-          <div class="card">
-            <img src="${getDetail.imageUrl}" alt="camera1">
+      `
+        <div class="card">
+          <img src="${getDetail.imageUrl}" alt="camera1">
+            <div class="card-body">
               <h2 class="name">${getDetail.name}</h2>
               <p class="price">${getDetail.price/100}$</p>
+              <h4>Description</h4>
               <p>${getDetail.description}</p>
-              <label for="lenses">Lenses</label>
-                <select id="lenses">
-                  ${lenses}
-               </select>
-              <button class="linkCart btn btn-primary">Add To Cart</button>
-          </div>`;
+              <label for="lenses">Choose a lense </label>
+                <select id="lenses"></select>
+            </div>
+            <div class="card-footer">
+              <button class="linkCart btn">Add To Cart</button>
+            </div>
+        </div>`;
 
       html+= cardHtml;
       const products = document.querySelector(this.productClass);
@@ -91,66 +94,53 @@ class DisplayCameras{
       listOfLenses.innerHTML = listHtml;
   }
 
-// Display one camera in html
-  async getDataOneCam(){
-    var getDetails = await this.fetchOneCam();
-    this.displayOneCam(getDetails);
+  // Query parameter
+  getUrlParams(){
+    var param = window.location.search;
+    var newUrl = new URLSearchParams(param);
+    return newUrl.get("id");
   }
 
-  // Query parameter
-    getUrlParams(){
-      var param = window.location.search;
-      var newUrl = new URLSearchParams(param);
-      return newUrl.get("id");
-    }
-
-    async setStorage(){
-      var cartItems = [];
-      await this.fetchOneCam();
-      document.querySelector('.linkCart').addEventListener("click", () => {
-      var name = document.querySelector('.name').textContent;
-      cartItems.push(name);
-      var json = JSON.stringify(name);
-      return localStorage.setItem('camera', json);
+  addBtnListener(){
+    var this1 = this;
+    var btn = document.querySelector('.linkCart');
+    console.log(btn);
+    btn.addEventListener("click", () => {
+      var cart = new Cart();
+      cart.addItem(this1.camData);
     });
   }
 
 
+  // Display one camera in html
+    async getDataOneCam(){
+      var getDetails = await this.fetchOneCam();
+      this.camData = getDetails;
+      this.displayOneCam(getDetails);
+      this.addBtnListener();
+    }
 }
 
 
 class Cart{
-
-  displayCart(item){
-    var items = this.getItems();
-    var html = "";
-    // for (let item of items){
-      var card =
-      `
-      <div class="d-flex flex-row align-items-baseline">
-        <p class="name mr-auto p-2">${item.name}</p>
-        <p>${item.price}</p>
-        <input type="text">
-        <button class="btn btn-danger">Remove</button>
-      </div>
-      `
-      html += card;
-    // }
-    const products = document.querySelector('.products');
-    products.innerHTML = html;
+  constructor(){
+    this.cardItems = [];
+    console.log(this.camData);
   }
-    getItems(){
+  addItem(camData){
+    this.cardItems.push(this.camData);
+        console.log(this.camData);
+    var json = localStorage.setItem('cart-items', this.camData);
 
-      var cartItems = [];
-      var json = localStorage.getItem("camera");
-      if(json){
-        cartItems = JSON.parse(json);
-      }
-      return json;
 
+    // push the item in the array, check for duplicates
+    // store info in local storage
   }
+
+
   showCart(){
-    var item = this.getItems();
-    this.displayCart(item);
+    var cartItems = [];
+
   }
+
 }
