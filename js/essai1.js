@@ -104,13 +104,20 @@ class DisplayCameras{
   addBtnListener(){
     var this1 = this;
     var btn = document.querySelector('.linkCart');
-    console.log(btn);
     btn.addEventListener("click", () => {
       var cart = new Cart();
       cart.addItem(this1.camData);
     });
   }
-
+  // Function setTimeout
+  // btn.innerHTML = "";
+  // var footer = document.querySelector('.card-footer');
+  // var message = document.createElement("p");
+  // message.textContent = "item has been added to your cart";
+  // footer.appendChild(message);
+  // setTimeOut(()=> {
+  //   message.Remove();
+  // }, 2000)
 
   // Display one camera in html
     async getDataOneCam(){
@@ -124,23 +131,49 @@ class DisplayCameras{
 
 class Cart{
   constructor(){
-    this.cardItems = [];
-    console.log(this.camData);
+    this.cartItems = [];
   }
   addItem(camData){
-    this.cardItems.push(this.camData);
-        console.log(this.camData);
-    var json = localStorage.setItem('cart-items', this.camData);
-
-
-    // push the item in the array, check for duplicates
-    // store info in local storage
+    this.cartItems.push(app.camData);
+    console.log(this.cartItems);
+    var json = localStorage.setItem('cart-items', JSON.stringify(app.camData));
   }
 
 
-  showCart(){
-    var cartItems = [];
+  getStorage(){
+    var json = localStorage.getItem('cart-items');
+    if (json) {
+      this.cartItems = JSON.parse(json);
+      return this.cartItems;
+    }
+  }
 
+  showCart(){
+    var camera = this.getStorage();
+    let html = "";
+      let cart =
+      ` <div class="d-flex flex-row align-items-baseline">
+            <p class="mr-auto p-2">${camera.name}</p>
+            <p>${camera.price/100}$</p>
+            <input type="text">
+            <button class="remove btn btn-danger">Remove</button>
+          </div>
+      `
+      html+=cart;
+    const products = document.querySelector('.products');
+    products.innerHTML = html;
+  }
+
+  removeItem(){
+    var removeBtn = document.querySelector('.remove');
+    removeBtn.addEventListener("click", ()=>{
+      document.querySelector('.d-flex').innerHTML = "";
+      localStorage.clear();
+    })
+  }
+  displayCart(){
+    this.showCart();
+    this.removeItem();
   }
 
 }
