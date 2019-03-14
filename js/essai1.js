@@ -39,7 +39,7 @@ class DisplayCameras{
   async getData(){
     let cameras = await this.fetchData();
     this.init(cameras);
-  }
+    }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -174,13 +174,16 @@ class Cart{
     for (let item of camera){
       let cart =
       ` <div class="d-flex flex-row align-items-baseline">
+            <img src="${item.imageUrl}" height="50" width="50">
             <p class="mr-auto p-2">${item.name}</p>
-            <p>${item.price/100}$</p>
-            <input type="text">
+            <p class="price">${item.price/100}</p>
+            <input class="quantity" type="number" value="0">
             <button class="remove btn btn-danger">Remove</button>
+            <div class="total">
+              <p>Total: <span class="total-cart">0</span></p>
+            </div>
           </div>
       `
-
             html+=cart;
     }
 
@@ -196,9 +199,36 @@ class Cart{
     });
   }
 
+  incrementQuantity(){
+      var quantities = document.querySelectorAll('.quantity');
+      quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
+        var value = e.target.value;
+        if(value <= 0){
+            value = 1;
+        }
+        return value;
+      }));
+  }
+
+  totalCart(){
+    var total = document.querySelector('.total-cart');
+    var price = document.querySelector('.price');
+    var quantity = document.querySelector('.quantity');
+    quantity.addEventListener('change', (e) => {
+      var value = e.target.value;
+      total.textContent =  value * price.textContent;
+    });
+
+
+  }
+
+
+
   displayCart(){
     this.showCart();
     this.removeItem();
+    this.incrementQuantity();
+    this.totalCart();
   }
 
 }
