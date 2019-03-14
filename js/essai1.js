@@ -104,20 +104,14 @@ class DisplayCameras{
   addBtnListener(){
     var this1 = this;
     var btn = document.querySelector('.linkCart');
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
       var cart = new Cart();
+      cart.message();
       cart.addItem(this1.camData);
+      cart.priceIcon();
     });
   }
-  // Function setTimeout
-  // btn.innerHTML = "";
-  // var footer = document.querySelector('.card-footer');
-  // var message = document.createElement("p");
-  // message.textContent = "item has been added to your cart";
-  // footer.appendChild(message);
-  // setTimeOut(()=> {
-  //   message.Remove();
-  // }, 2000)
 
   // Display one camera in html
     async getDataOneCam(){
@@ -133,10 +127,36 @@ class Cart{
   constructor(){
     this.cartItems = [];
   }
+
   addItem(camData){
-    this.cartItems.push(app.camData);
-    console.log(this.cartItems);
-    var json = localStorage.setItem('cart-items', JSON.stringify(app.camData));
+      var items = localStorage.getItem('cart-items');
+      if (items){
+        var json = JSON.parse(items);
+      }
+        this.cartItems.push(app.camData);
+        var json = JSON.stringify(this.cartItems);
+        localStorage.setItem('cart-items', json);
+        // return this.cartItems;
+    }
+
+  // Function setTimeout
+  message(){
+    var body = document.querySelector('.card-footer');
+    var message = document.createElement("p");
+    message.textContent = "item has been added to your cart";
+    var navbar = document.querySelector('.navbar');
+    body.appendChild(message);
+    setTimeout(()=> {
+      message.style.display = "none";
+    }, 2000)
+  }
+
+  //get the amount in the cart icon
+  priceIcon(){
+    var cartIcon = document.querySelector('.nav-counter');
+    cartIcon.textContent = (app.camData.price/100)+'$';
+    localStorage.setItem("cart-price", cartIcon.textContent);
+    localStorage.getItem("cart-price");
   }
 
 
@@ -151,15 +171,19 @@ class Cart{
   showCart(){
     var camera = this.getStorage();
     let html = "";
+    for (let item of camera){
       let cart =
       ` <div class="d-flex flex-row align-items-baseline">
-            <p class="mr-auto p-2">${camera.name}</p>
-            <p>${camera.price/100}$</p>
+            <p class="mr-auto p-2">${item.name}</p>
+            <p>${item.price/100}$</p>
             <input type="text">
             <button class="remove btn btn-danger">Remove</button>
           </div>
       `
-      html+=cart;
+
+            html+=cart;
+    }
+
     const products = document.querySelector('.products');
     products.innerHTML = html;
   }
@@ -169,8 +193,9 @@ class Cart{
     removeBtn.addEventListener("click", ()=>{
       document.querySelector('.d-flex').innerHTML = "";
       localStorage.clear();
-    })
+    });
   }
+
   displayCart(){
     this.showCart();
     this.removeItem();
