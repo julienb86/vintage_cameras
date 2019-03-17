@@ -129,15 +129,23 @@ class Cart{
   }
 
   addItem(camData){
-      var items = localStorage.getItem('cart-items');
-      if (items){
-        var json = JSON.parse(items);
-      }
-        this.cartItems.push(app.camData);
-        var json = JSON.stringify(this.cartItems);
-        localStorage.setItem('cart-items', json);
-        // return this.cartItems;
+    var items = localStorage.getItem('cart-items');
+    if(items === null){
+      this.cartItems.push(camData);
+      localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+    }else{
+      this.cartItems.push(camData);
+      var json = JSON.parse(items);
+      localStorage.setItem('cart-items', JSON.stringify(json));
+      return json;
     }
+  }
+
+
+// getStorage(){
+//
+//
+// }
 
   // Function setTimeout
   message(){
@@ -151,7 +159,7 @@ class Cart{
     }, 2000)
   }
 
-  //get the amount in the cart icon
+  // get the amount in the cart icon
   priceIcon(){
     var cartIcon = document.querySelector('.nav-counter');
     cartIcon.textContent = (app.camData.price/100)+'$';
@@ -160,21 +168,17 @@ class Cart{
   }
 
 
-  getStorage(){
-    var json = localStorage.getItem('cart-items');
-    if (json) {
-      this.cartItems = JSON.parse(json);
-      return this.cartItems;
-    }
-  }
+
 
   showCart(){
-    var camera = this.getStorage();
+    var camera = JSON.parse(localStorage.getItem('cart-items'));
+    // var camera = this.addItem();
+    this.incrementQuantity();
     let html = "";
     for (let item of camera){
       let cart =
       ` <div class="d-flex flex-row align-items-baseline">
-            <img src="${item.imageUrl}" height="50" width="50">
+            <img src="${item.imageUrl}" height="75" width="75">
             <p class="mr-auto p-2">${item.name}</p>
             <p class="price">${item.price/100}</p>
             <input class="quantity" type="number" value="0">
@@ -186,7 +190,6 @@ class Cart{
       `
             html+=cart;
     }
-
     const products = document.querySelector('.products');
     products.innerHTML = html;
   }
