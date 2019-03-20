@@ -1,6 +1,4 @@
 let url = "http://localhost:3000/api/cameras/";
-
-
 class DisplayCameras{
   constructor(productClass){
     this.productClass = productClass;
@@ -130,12 +128,12 @@ class Cart{
 
   addItem(camData){
     var items = localStorage.getItem('cart-items');
-    if(items != null){
-      var json = JSON.parse(items);
-      this.cartItems.push(json);
+    if(items !== null){
+      this.cartItems = JSON.parse(items);
     }
-    this.cartItems.push(camData);
-    localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+      this.cartItems.push(camData);
+      localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+
 }
 
 
@@ -144,7 +142,6 @@ class Cart{
     var body = document.querySelector('.card-footer');
     var message = document.createElement("p");
     message.textContent = "item has been added to your cart";
-    var navbar = document.querySelector('.navbar');
     body.appendChild(message);
     setTimeout(()=> {
       message.style.display = "none";
@@ -161,62 +158,34 @@ class Cart{
 
 
   showCart(){
-    var cameras = JSON.parse(localStorage.getItem('cart-items'));
-    this.cartItems.push(cameras);
+    var jsonitems = localStorage.getItem('cart-items');
+    if (jsonitems !== null) {
+      this.cartItems = JSON.parse(jsonitems);
+    }
     let html = "";
-    cameras.forEach(item => {
+    this.cartItems.forEach(item => {
       let cart =
-      ` <div class="d-flex flex-row align-items-baseline">
+      `
             <img src="${item.imageUrl}" height="75" width="75">
-            <p class="mr-auto p-2">${item.name}</p>
-            <p class="price">${item.price/100}</p>
-            <input class="quantity" type="number" value="0">
+            <p class="col-md-3">${item.name}</p>
+            <p class="price col-md-3">${item.price/100}</p>
+            <input class="quantity col-md-3" type="number" value="0">
             <button class="remove btn btn-danger">Remove</button>
-            <div class="total">
-              <p>Total: <span class="total-cart">0</span></p>
-            </div>
-          </div>
-          <form>
-            <div class="form-row row">
-              <div class="form-group col-md-6">
-                <label for="inputLastName">Last Name</label>
-                <input type="text" autofocus="autofocus" class="form-control" id="inputLastName" minlength="3" placeholder="Last Name" required>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="inputFirstName">First Name</label>
-                <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
-              </div>
-              <div class="form-group col-md-12">
-                <label for="inputEmail">Email</label>
-                <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
-              </div>
-              <div class="form-group col-md-12">
-                <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
-              </div>
-              <div class="form-group col-md-6">
-                <label for="inputCity">City</label>
-                <input type="text" class="form-control" id="inputCity" minlength="3" placeholder="City" required>
-              </div>
-              <div class="form-group col-md-3">
-                <label for="inputZip">ZIP</label>
-                <input type="text" class="form-control" id="inputZip"  placeholder="ZIP" required>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg offset-md-5" id="submit-btn">Submit</button>
-          </form>
+
       `
             html+=cart;
     });
     const products = document.querySelector('.products');
-    products.innerHTML = html;
+    var cartItems = document.querySelector('.cart-items');
+    cartItems.innerHTML = html;
+
   }
 
   removeItem(){
     var removeBtns = document.querySelectorAll('.remove');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
       document.querySelector('.d-flex').innerHTML = "";
-      localStorage.clear();
+      localStorage.removeItem('cart-items');
     }));
   }
 
@@ -289,23 +258,20 @@ class Cart{
       };
       request.setRequestHeader('Content-Type', 'application/json');
       request.send(JSON.stringify(data));
-      console.log(data);
     });
   }
 
-  data(){
-    var user = this.userData();
-    this.makeRequest(user);
-  }
 
 // it sends post info from the user to the server
  // makeRequest(data){
+ 
  //      const settings = {
  //      method: 'POST',
  //      headers: {
  //          Accept: 'application/json',
  //          'Content-Type': 'application/json',
  //      }
+ // body
  //    }
  //      let response = fetch(url + "order", settings );
  //      let data = response.json();
@@ -318,12 +284,27 @@ class Cart{
     try{
       const requestPromise = this.makeRequest(post);
       const response = await requestPromise;
-      console.log(response);
-      var datasDiv = document.querySelector('.data');
-      datasDiv.textContent = response.email;
-      // this.displayOrder(response);
+      this.displayOrder(response);
+      console.log(this.displayOrder(response));
     }catch(errorResponse){
       console.log(errorResponse);
     }
+  }
+
+  // display the data from the server
+  displayOrder(data){
+    let html = "";
+    let orderHtml =
+    `<div>
+      <p>${data.email}</p>
+    </div>`;
+    html += orderHtml;
+    const products = document.querySelector('.products');
+    products.innerHTML = html;
+  }
+
+  async getOrder(){
+    await this.submitFormData();
+    this.displayOrder();
   }
 }

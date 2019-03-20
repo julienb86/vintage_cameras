@@ -21,7 +21,16 @@
     </nav>
   <!-- PRODUCTS -->
 
-  <div class="row products justify-content-center">
+  <div class="products justify-content-center">
+    <div class="items row">
+      <p class="col-md-3">Name</p>
+      <p class="col-md-3">Price</p>
+      <p class="col-md-3">Quantity</p>
+      <p class="col-md-3">Total= <span class="total-cart">0</span></p>
+    </div>
+    <div class="cart-items d-flex flex-row align-items-baseline">
+
+    </div>
     <!-- <div class="d-flex flex-row align-items-baseline">
       <p class="mr-auto p-2">Rock</p>
       <p>9.99$</p>
@@ -31,7 +40,36 @@
 
   </div>
 
-  <div class="data"></div>
+
+  <form>
+    <div class="form-row row">
+      <div class="form-group col-md-6">
+        <label for="inputLastName">Last Name</label>
+        <input type="text" autofocus="autofocus" class="form-control" id="inputLastName" minlength="3" placeholder="Last Name" required>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputFirstName">First Name</label>
+        <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
+      </div>
+      <div class="form-group col-md-12">
+        <label for="inputEmail">Email</label>
+        <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
+      </div>
+      <div class="form-group col-md-12">
+        <label for="inputAddress">Address</label>
+        <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputCity">City</label>
+        <input type="text" class="form-control" id="inputCity" minlength="3" placeholder="City" required>
+      </div>
+      <div class="form-group col-md-3">
+        <label for="inputZip">ZIP</label>
+        <input type="text" class="form-control" id="inputZip"  placeholder="ZIP" required>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg offset-md-5" id="submit-btn">Submit</button>
+  </form>
   <!-- END PRODUCTS -->
 
   </div>
@@ -40,9 +78,7 @@
 var cart = new Cart();
 
 cart.displayCart();
-
-cart.submitFormData();
-// cart.displayOrder();
+console.log(cart.getOrder());
 </script>
 
 
