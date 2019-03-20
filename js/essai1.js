@@ -109,7 +109,7 @@ class DisplayCameras{
       var cart = new Cart();
       cart.message();
       cart.addItem(this1.camData);
-      cart.priceIcon();
+      // cart.priceIcon();
     });
   }
 
@@ -130,22 +130,14 @@ class Cart{
 
   addItem(camData){
     var items = localStorage.getItem('cart-items');
-    if(items === null){
-      this.cartItems.push(camData);
-      localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
-    }else{
-      this.cartItems.push(camData);
+    if(items != null){
       var json = JSON.parse(items);
-      localStorage.setItem('cart-items', JSON.stringify(json));
-      return json;
+      this.cartItems.push(json);
     }
-  }
+    this.cartItems.push(camData);
+    localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+}
 
-
-// getStorage(){
-//
-//
-// }
 
   // Function setTimeout
   message(){
@@ -168,14 +160,11 @@ class Cart{
   }
 
 
-
-
   showCart(){
-    var camera = JSON.parse(localStorage.getItem('cart-items'));
-    // var camera = this.addItem();
-    this.incrementQuantity();
+    var cameras = JSON.parse(localStorage.getItem('cart-items'));
+    this.cartItems.push(cameras);
     let html = "";
-    for (let item of camera){
+    cameras.forEach(item => {
       let cart =
       ` <div class="d-flex flex-row align-items-baseline">
             <img src="${item.imageUrl}" height="75" width="75">
@@ -187,19 +176,48 @@ class Cart{
               <p>Total: <span class="total-cart">0</span></p>
             </div>
           </div>
+          <form>
+            <div class="form-row row">
+              <div class="form-group col-md-6">
+                <label for="inputLastName">Last Name</label>
+                <input type="text" autofocus="autofocus" class="form-control" id="inputLastName" minlength="3" placeholder="Last Name" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputFirstName">First Name</label>
+                <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="inputEmail">Email</label>
+                <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                <input type="text" class="form-control" id="inputCity" minlength="3" placeholder="City" required>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputZip">ZIP</label>
+                <input type="text" class="form-control" id="inputZip"  placeholder="ZIP" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg offset-md-5" id="submit-btn">Submit</button>
+          </form>
       `
             html+=cart;
-    }
+    });
     const products = document.querySelector('.products');
     products.innerHTML = html;
   }
 
   removeItem(){
-    var removeBtn = document.querySelector('.remove');
-    removeBtn.addEventListener("click", ()=>{
+    var removeBtns = document.querySelectorAll('.remove');
+    removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
       document.querySelector('.d-flex').innerHTML = "";
       localStorage.clear();
-    });
+    }));
   }
 
   incrementQuantity(){
@@ -221,12 +239,9 @@ class Cart{
       var value = e.target.value;
       total.textContent =  value * price.textContent;
     });
-
-
   }
 
-
-
+//display the cameras choosen by the user and the form to submit the order
   displayCart(){
     this.showCart();
     this.removeItem();
@@ -234,4 +249,81 @@ class Cart{
     this.totalCart();
   }
 
+
+
+
+//   // when the users clicks on submit button it returns an object with the users info.
+    userData(){
+      let inputLastName = document.getElementById('inputLastName');
+      let inputFirstName = document.getElementById('inputFirstName');
+      let inputAddress = document.getElementById('inputAddress');
+      let inputCity = document.getElementById('inputCity');
+      let inputEmail = document.getElementById('inputEmail');
+      let submit = document.getElementById("submit-btn");
+        submit.addEventListener("click", (e)=> {
+        e.preventDefault();
+    const form = {
+      firstName: inputFirstName.value,
+      lastName: inputLastName.value,
+      address: inputAddress.value,
+      city: inputCity.value,
+      email: inputEmail.value
+      // const arrayProducts = []; id of the products: strings
+    }
+    this.makeRequest(form);
+  });
+}
+
+  makeRequest(data){
+    return new Promise((resolve, reject)=>{
+      let request = new XMLHttpRequest();
+      request.open('POST', "http://localhost:3000/api/cameras/order");
+      request.onreadystatechange = () =>{
+        if(request.readyState === 4){
+          if(request.status === 201){
+            resolve(JSON.parse(request.response));
+          }else{
+          reject(JSON.parse(request.response));
+          }
+        }
+      };
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify(data));
+      console.log(data);
+    });
+  }
+
+  data(){
+    var user = this.userData();
+    this.makeRequest(user);
+  }
+
+// it sends post info from the user to the server
+ // makeRequest(data){
+ //      const settings = {
+ //      method: 'POST',
+ //      headers: {
+ //          Accept: 'application/json',
+ //          'Content-Type': 'application/json',
+ //      }
+ //    }
+ //      let response = fetch(url + "order", settings );
+ //      let data = response.json();
+ //      return data;
+ //  }
+
+
+// get the data back from the server
+  async submitFormData(post){
+    try{
+      const requestPromise = this.makeRequest(post);
+      const response = await requestPromise;
+      console.log(response);
+      var datasDiv = document.querySelector('.data');
+      datasDiv.textContent = response.email;
+      // this.displayOrder(response);
+    }catch(errorResponse){
+      console.log(errorResponse);
+    }
+  }
 }
