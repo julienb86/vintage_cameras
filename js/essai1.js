@@ -131,11 +131,19 @@ class Cart{
     if(items !== null){
       this.cartItems = JSON.parse(items);
     }
-      this.cartItems.push(camData);
-      localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
-
+    this.checkIfSameCard(camData);
+    this.cartItems.push(camData);
+    localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
 }
 
+checkIfSameCard(camData){
+  for (let cart of this.cartItems){
+    if (cart._id === camData._id){
+      alert("You have already added this card :)");
+      return;
+    }
+  }
+}
 
   // Function setTimeout
   message(){
@@ -166,26 +174,34 @@ class Cart{
     this.cartItems.forEach(item => {
       let cart =
       `
-            <img src="${item.imageUrl}" height="75" width="75">
-            <p class="col-md-3">${item.name}</p>
-            <p class="price col-md-3">${item.price/100}</p>
-            <input class="quantity col-md-3" type="number" value="0">
-            <button class="remove btn btn-danger">Remove</button>
+        <div class="row content d-flex align-items-center">
+          <img class="col-2" src="${item.imageUrl}" height="75" width="75"/>
+          <p class="col-1">${item.name}</p>
+          <div class="col-3">
+            <p class="price col-3">${item.price/100}</p>
+          </div>
+          <input class="quantity col-2" type="number" value="0"/>
+          <button class="remove btn">Remove</button>
+        </div>
 
       `
             html+=cart;
     });
     const products = document.querySelector('.products');
     var cartItems = document.querySelector('.cart-items');
+    products.appendChild(cartItems);
+
     cartItems.innerHTML = html;
 
   }
 
   removeItem(){
     var removeBtns = document.querySelectorAll('.remove');
+    var container = document.querySelector('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
-      document.querySelector('.d-flex').innerHTML = "";
-      localStorage.removeItem('cart-items');
+      console.log(removeBtns);
+      container.parentNode.removeChild(container);
+      // localStorage.removeItem('cart-items');
     }));
   }
 
@@ -264,7 +280,7 @@ class Cart{
 
 // it sends post info from the user to the server
  // makeRequest(data){
- 
+
  //      const settings = {
  //      method: 'POST',
  //      headers: {
