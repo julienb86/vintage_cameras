@@ -197,11 +197,10 @@ checkIfSameCard(camData){
 
   removeItem(){
     var removeBtns = document.querySelectorAll('.remove');
-    var container = document.querySelector('.content');
+    var container = document.querySelectorAll('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
-      console.log(removeBtns);
-      container.parentNode.removeChild(container);
-      // localStorage.removeItem('cart-items');
+      btn.parentNode.remove(container);
+      // need to remove item from localStorage
     }));
   }
 
