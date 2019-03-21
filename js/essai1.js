@@ -121,6 +121,11 @@ class DisplayCameras{
 }
 
 
+// ////////////////////////////////////////////////////////////////////////////
+////////////////////////        CART              /////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
 class Cart{
   constructor(){
     this.cartItems = [];
@@ -140,7 +145,7 @@ checkIfSameCard(camData){
   for (let cart of this.cartItems){
     if (cart._id === camData._id){
       alert("You have already added this card :)");
-      return;
+      // localStorage.setItem('cart-items', cart);
     }
   }
 }
@@ -164,7 +169,7 @@ checkIfSameCard(camData){
     localStorage.getItem("cart-price");
   }
 
-
+// display the cards
   showCart(){
     var jsonitems = localStorage.getItem('cart-items');
     if (jsonitems !== null) {
@@ -199,37 +204,46 @@ checkIfSameCard(camData){
     var removeBtns = document.querySelectorAll('.remove');
     var container = document.querySelectorAll('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
-      btn.parentNode.remove(container);
+      btn.parentElement.remove(this.container);
+      localStorage.removeItem('cart-items', this.cartItems.splice(this.camData, this.camData));
       // need to remove item from localStorage
     }));
-  }
+}
 
-  incrementQuantity(){
-      var quantities = document.querySelectorAll('.quantity');
-      quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
-        var value = e.target.value;
-        if(value <= 0){
-            value = 1;
-        }
-        return value;
-      }));
-  }
+// removeItemLocalStorage(){
+//   for(let cart of this.cartItems){
+// }
+//   }
+
+  // incrementQuantity(){
+  //     var quantities = document.querySelectorAll('.quantity');
+  //     quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
+  //       var value = e.target.value;
+  //       console.log(value);
+  //       if(value <= 0){
+  //           value = 1;
+  //       }
+  //       return value;
+  //     }));
+  // }
 
   totalCart(){
     var total = document.querySelector('.total-cart');
     var price = document.querySelector('.price');
-    var quantity = document.querySelector('.quantity');
-    quantity.addEventListener('change', (e) => {
+    var quantities = document.querySelectorAll('.quantity');
+    quantities.forEach(quantity => quantity.addEventListener('change', (e) => {
       var value = e.target.value;
+      if(value <= 0){
+          value = 0;
+      }
       total.textContent =  value * price.textContent;
-    });
+    }));
   }
 
 //display the cameras choosen by the user and the form to submit the order
   displayCart(){
     this.showCart();
     this.removeItem();
-    this.incrementQuantity();
     this.totalCart();
   }
 
