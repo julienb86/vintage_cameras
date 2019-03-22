@@ -185,10 +185,9 @@ checkIfSameCard(camData){
           <div class="col-3">
             <p class="price col-3">${item.price/100}</p>
           </div>
-          <input class="quantity col-2" type="number" value="0"/>
+          <input class="quantity col-2" type="number" value="1"/>
           <button class="remove btn">Remove</button>
         </div>
-
       `
             html+=cart;
     });
@@ -205,7 +204,8 @@ checkIfSameCard(camData){
     var container = document.querySelectorAll('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
       btn.parentElement.remove(this.container);
-      localStorage.removeItem('cart-items', this.cartItems.splice(this.camData, this.camData));
+      this.totalCart();
+      // localStorage.removeItem('cart-items', this.cartItems.splice(this.camData, this.camData));
       // need to remove item from localStorage
     }));
 }
@@ -215,39 +215,43 @@ checkIfSameCard(camData){
 // }
 //   }
 
-  // incrementQuantity(){
-  //     var quantities = document.querySelectorAll('.quantity');
-  //     quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
-  //       var value = e.target.value;
-  //       console.log(value);
-  //       if(value <= 0){
-  //           value = 1;
-  //       }
-  //       return value;
-  //     }));
-  // }
+  incrementQuantity(){
+      var quantities = document.querySelectorAll('.quantity');
+      quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
+        var input = e.target;
+        console.log(input);
+        if(isNaN(input.value) || input.value <= 0){
+            input.value = 1;
+        }
+        this.totalCart();
+      }));
 
-  totalCart(){
-    var total = document.querySelector('.total-cart');
-    var price = document.querySelector('.price');
-    var quantities = document.querySelectorAll('.quantity');
-    quantities.forEach(quantity => quantity.addEventListener('change', (e) => {
-      var value = e.target.value;
-      if(value <= 0){
-          value = 0;
-      }
-      total.textContent =  value * price.textContent;
-    }));
   }
+
+// update the total element
+  totalCart(){
+    var container = document.querySelector('.cart-items');
+    var cards = container.getElementsByClassName('content');
+    var total = 0;
+    for(let card of cards){
+      var prices = card.querySelector('.price');
+      var price = prices.textContent;
+      var quantities = card.querySelector('.quantity');
+      var quantity = quantities.value;
+      total += (price * quantity);
+    }
+    var totalElt = document.querySelector('.total-cart');
+    totalElt.innerText = total;
+}
+
 
 //display the cameras choosen by the user and the form to submit the order
   displayCart(){
     this.showCart();
     this.removeItem();
+    this.incrementQuantity();
     this.totalCart();
   }
-
-
 
 
 //   // when the users clicks on submit button it returns an object with the users info.
