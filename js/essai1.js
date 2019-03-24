@@ -106,7 +106,6 @@ class DisplayCameras{
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       var cart = new Cart();
-      cart.message();
       cart.addItem(this1.camData);
       cart.updateCartIcon();
     });
@@ -148,6 +147,7 @@ class Cart{
     }
     if (!exist){
       this.cartItems.push(camData);
+      this.message();
       localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
     }
 }
