@@ -101,15 +101,17 @@ class DisplayCameras{
 
   addBtnListener(){
     var this1 = this;
+
     var btn = document.querySelector('.linkCart');
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       var cart = new Cart();
       cart.message();
       cart.addItem(this1.camData);
-      // cart.priceIcon();
+      cart.updateCartIcon();
     });
   }
+
 
   // Display one camera in html
     async getDataOneCam(){
@@ -133,22 +135,23 @@ class Cart{
 
   addItem(camData){
     var items = localStorage.getItem('cart-items');
+    var exist = false;
     if(items !== null){
       this.cartItems = JSON.parse(items);
     }
-    this.checkIfSameCard(camData);
-    this.cartItems.push(camData);
-    localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+    for (let cart of this.cartItems){
+      if (cart._id === camData._id){
+        alert("You have already added this camera to your cart :)");
+        exist = true;
+        break;
+      }
+    }
+    if (!exist){
+      this.cartItems.push(camData);
+      localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+    }
 }
 
-checkIfSameCard(camData){
-  for (let cart of this.cartItems){
-    if (cart._id === camData._id){
-      alert("You have already added this card :)");
-      // localStorage.setItem('cart-items', cart);
-    }
-  }
-}
 
   // Function setTimeout
   message(){
@@ -161,13 +164,6 @@ checkIfSameCard(camData){
     }, 2000)
   }
 
-  // get the amount in the cart icon
-  priceIcon(){
-    var cartIcon = document.querySelector('.nav-counter');
-    cartIcon.textContent = (app.camData.price/100)+'$';
-    localStorage.setItem("cart-price", cartIcon.textContent);
-    localStorage.getItem("cart-price");
-  }
 
 // display the cards
   showCart(){
@@ -210,16 +206,10 @@ checkIfSameCard(camData){
     }));
 }
 
-// removeItemLocalStorage(){
-//   for(let cart of this.cartItems){
-// }
-//   }
-
   incrementQuantity(){
       var quantities = document.querySelectorAll('.quantity');
       quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
         var input = e.target;
-        console.log(input);
         if(isNaN(input.value) || input.value <= 0){
             input.value = 1;
         }
@@ -240,10 +230,23 @@ checkIfSameCard(camData){
       var quantity = quantities.value;
       total += (price * quantity);
     }
+
     var totalElt = document.querySelector('.total-cart');
     totalElt.innerText = total;
 }
 
+updateCartIcon (){
+  var counter = 0;
+  var cartElt = document.querySelector('.nav-counter');
+  cartElt.innerText = counter + 1;
+  localStorage.setItem('cart-icon', cartElt.innerText);
+}
+
+getCartIcon(){
+  var cartElt = document.querySelector('.nav-counter');
+  cartElt.innerText = localStorage.getItem("cart-icon");
+
+}
 
 //display the cameras choosen by the user and the form to submit the order
   displayCart(){
@@ -251,7 +254,14 @@ checkIfSameCard(camData){
     this.removeItem();
     this.incrementQuantity();
     this.totalCart();
+    this.updateCartIcon();
   }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+// ////////////////////////POST REQUEST FOR THE ORDER PAGE//////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 
 //   // when the users clicks on submit button it returns an object with the users info.
