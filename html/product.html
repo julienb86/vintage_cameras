@@ -20,7 +20,7 @@
 
     <nav class="navbar navbar-light navbar-expand-xl">
             <a class="nav-link" href="../index.html">Home <span class="sr-only">(current)</span></a>
-          <a href="cart.html" class="nav-link" id="cart-counter"><i class="fas fa-shopping-cart"><span class="nav-counter">0$</span></i></a>
+          <a href="cart.html" class="nav-link" id="cart-counter"><i class="fas fa-shopping-cart"><span class="nav-counter">0</span></i></a>
     </nav>
 
 
@@ -35,6 +35,9 @@
   <script type="text/javascript">
   var app = new DisplayCameras(".products");
   app.getDataOneCam();
+  var cart = new Cart();
+  cart.updateCartIcon();
+
 
 
   </script>

@@ -17,7 +17,7 @@
   <div class="container-fluid">
     <nav class="navbar navbar-light navbar-expand-xl">
             <a class="nav-link" href="../index.html">Home</a>
-          <a href="#" class="nav-link" id="cart-counter"><i class="fas fa-shopping-cart"><span class="nav-counter">0$</span></i></a>
+          <a href="#" class="nav-link" id="cart-counter"><i class="fas fa-shopping-cart"><span class="nav-counter">0</span></i></a>
     </nav>
   <!-- PRODUCTS -->
 
@@ -27,11 +27,12 @@
       <p class="col-3">price</p>
       <p class="col-3">quantity</p>
     </div>
-    <div class="row cart-items">
 
+
+    <div class="row cart-items">
+<!-- cards chosen by the user -->
     </div>
 
-<!-- cards chosen by the user -->
 
   </div>
   <div class="total row d-flex justify-content-center">
@@ -75,7 +76,7 @@
 var cart = new Cart();
 
 cart.displayCart();
-console.log(cart.getOrder());
+
 </script>
 
 

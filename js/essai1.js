@@ -177,7 +177,7 @@ class Cart{
       `
         <div class="row content d-flex align-items-center">
           <img class="col-2" src="${item.imageUrl}" height="75" width="75"/>
-          <p class="col-1">${item.name}</p>
+          <p class="col-1 name">${item.name}</p>
           <div class="col-3">
             <p class="price col-3">${item.price/100}</p>
           </div>
@@ -195,11 +195,30 @@ class Cart{
 
   }
 
+
+// TRYING TO REMOVE ITEM FROM LS
+removeItemFromLocalStorage(){
+  var names = document.querySelectorAll('.name');
+        for (let name of names){
+          for(let cart of this.cartItems){
+            if(name.textContent === cart.name){
+              var removedItem = this.cartItems.splice(cart, 1);
+              console.log(this.cartItems);
+              console.log(removedItem);
+              // console.log(removedItem);
+              // var newCartItems = delete this.cartItems[cart];              // console.log(this.cartItems);
+              // localStorage.setItem('cart-items', JSON.stringify(removedItem));
+            }
+          }
+        }
+
+}
   removeItem(){
     var removeBtns = document.querySelectorAll('.remove');
     var container = document.querySelectorAll('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
-      btn.parentElement.remove(this.container);
+      btn.parentElement.remove();
+      this.removeItemFromLocalStorage();
       this.totalCart();
       // localStorage.removeItem('cart-items', this.cartItems.splice(this.camData, this.camData));
       // need to remove item from localStorage
@@ -221,7 +240,7 @@ class Cart{
 // update the total element
   totalCart(){
     var container = document.querySelector('.cart-items');
-    var cards = container.getElementsByClassName('content');
+    var cards = container.querySelectorAll('.content');
     var total = 0;
     for(let card of cards){
       var prices = card.querySelector('.price');
