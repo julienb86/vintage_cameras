@@ -101,17 +101,15 @@ class DisplayCameras{
 
   addBtnListener(){
     var this1 = this;
-
     var btn = document.querySelector('.linkCart');
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       var cart = new Cart();
       cart.addItem(this1.camData);
-      cart.updateCartIcon();
     });
   }
 
-
+//
   // Display one camera in html
     async getDataOneCam(){
       var getDetails = await this.fetchOneCam();
@@ -199,15 +197,16 @@ class Cart{
 // TRYING TO REMOVE ITEM FROM LS
 removeItemFromLocalStorage(){
   var names = document.querySelectorAll('.name');
-        for (let name of names){
-          for(let cart of this.cartItems){
-            if(name.textContent === cart.name){
-              var removedItem = this.cartItems.splice(cart, 1);
-              console.log(this.cartItems);
-              console.log(removedItem);
+        for (let name in names){
+          for(let cart in this.cartItems){
+            if(name === cart){
+              console.log(cart);
+              // this.cartItems.splice(cart, 1);
+              // console.log(this.cartItems);
+              // console.log(this.cartItems);
               // console.log(removedItem);
               // var newCartItems = delete this.cartItems[cart];              // console.log(this.cartItems);
-              // localStorage.setItem('cart-items', JSON.stringify(removedItem));
+              // localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
             }
           }
         }
@@ -220,6 +219,7 @@ removeItemFromLocalStorage(){
       btn.parentElement.remove();
       this.removeItemFromLocalStorage();
       this.totalCart();
+      this.cartIcon();
       // localStorage.removeItem('cart-items', this.cartItems.splice(this.camData, this.camData));
       // need to remove item from localStorage
     }));
@@ -254,17 +254,23 @@ removeItemFromLocalStorage(){
     totalElt.innerText = total;
 }
 
-updateCartIcon (){
-  var counter = 0;
-  var cartElt = document.querySelector('.nav-counter');
-  cartElt.innerText = counter + 1;
-  localStorage.setItem('cart-icon', cartElt.innerText);
+// updateCartIcon (){
+//   var counter = 0;
+//   var cartElt = document.querySelector('.nav-counter');
+//   cartElt.innerText = counter + 1;
+//   localStorage.setItem('cart-icon', cartElt.innerText);
+// }
+
+cartIcon(){
+  var camInCart = document.querySelectorAll('.content');
+  var counterIcon = document.querySelector('.nav-counter');
+  counterIcon.textContent = camInCart.length;
+  localStorage.setItem('cart-icon', counterIcon.innerText);
 }
 
 getCartIcon(){
   var cartElt = document.querySelector('.nav-counter');
   cartElt.innerText = localStorage.getItem("cart-icon");
-
 }
 
 //display the cameras choosen by the user and the form to submit the order
@@ -273,7 +279,7 @@ getCartIcon(){
     this.removeItem();
     this.incrementQuantity();
     this.totalCart();
-    this.updateCartIcon();
+    this.cartIcon();
   }
 
 
