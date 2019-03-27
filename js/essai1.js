@@ -24,7 +24,7 @@ class DisplayCameras{
           <img src="${camera.imageUrl}" alt="camera1">
           <div class="card-name d-flex flex-column align-items-center">
             <h2 class="text-center">${camera.name}</h2>
-            <p>${camera.price/100}$</p>
+            <p>$ ${camera.price/100}</p>
             <a href="html/product.html?id=${camera._id}" class="btn">Details</a>
           </div>
         </div>`;
@@ -62,7 +62,7 @@ class DisplayCameras{
           <img src="${getDetail.imageUrl}" alt="camera1">
             <div class="card-body">
               <h2 class="name">${getDetail.name}</h2>
-              <p class="price">${getDetail.price/100}$</p>
+              <p class="price">$ ${getDetail.price/100}</p>
               <h4>Description</h4>
               <p>${getDetail.description}</p>
               <label for="lenses">Choose a lense </label>
@@ -179,8 +179,8 @@ class Cart{
         <div class="row content d-flex align-items-center">
           <img class="col-2" src="${item.imageUrl}" height="75" width="75"/>
           <p class="col-1 name" data-id="${item._id}">${item.name}</p>
-          <div class="col-3">
-            <p class="price col-3">${item.price/100}</p>
+          <div class="col-4">
+            <p class="price col-3">$ ${item.price/100}</p>
           </div>
           <input class="quantity col-2" type="number" value="1"/>
           <button class="remove btn">Remove</button>
@@ -197,8 +197,7 @@ class Cart{
   }
 
 
-// TRYING TO REMOVE ITEM FROM LS
-
+/* remove item */
   removeItem(){
     var id = this.getCardId();
     var removeBtns = document.querySelectorAll('.remove');
@@ -215,11 +214,12 @@ class Cart{
         if(itemIndex > -1){
           this.cartItems.splice(itemIndex, 1);
           localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+          this.totalCart();
+          this.displayCart();
         }
-        this.showCart();
 
-        this.totalCart();
       }));
+
   }
 
   getCardId(){
@@ -248,13 +248,14 @@ class Cart{
     for(let card of cards){
       var prices = card.querySelector('.price');
       var price = prices.textContent;
+      var newPrice = price.slice(1).trim();
       var quantities = card.querySelector('.quantity');
       var quantity = quantities.value;
-      total += (price * quantity);
+      total += (newPrice * quantity);
     }
 
     var totalElt = document.querySelector('.total-cart');
-    totalElt.innerText = total;
+    totalElt.innerText = "$ " + total;
     var counterIcon = document.querySelector('.nav-counter');
     counterIcon.innerText = this.cartIcon();
 }
@@ -263,7 +264,6 @@ class Cart{
 cartIcon(){
   var camInCart = document.querySelectorAll('.content');
   var numberOfCameras = camInCart.length;
-  console.log(numberOfCameras);
   return numberOfCameras;
 }
 
