@@ -32,6 +32,8 @@ class DisplayCameras{
     }
       const products = document.querySelector(this.productClass);
       products.innerHTML = html;
+      var counterIcon = document.querySelector('.nav-counter');
+      counterIcon.innerText = cart.cartIcon();
   }
 
   async getData(){
@@ -116,6 +118,7 @@ class DisplayCameras{
       this.camData = getDetails;
       this.displayOneCam(getDetails);
       this.addBtnListener();
+      cart.cartIcon();
     }
 }
 
@@ -175,7 +178,7 @@ class Cart{
       `
         <div class="row content d-flex align-items-center">
           <img class="col-2" src="${item.imageUrl}" height="75" width="75"/>
-          <p class="col-1 name">${item.name}</p>
+          <p class="col-1 name" data-id="${item._id}">${item.name}</p>
           <div class="col-3">
             <p class="price col-3">${item.price/100}</p>
           </div>
@@ -195,35 +198,35 @@ class Cart{
 
 
 // TRYING TO REMOVE ITEM FROM LS
-removeItemFromLocalStorage(){
-  var names = document.querySelectorAll('.name');
-        for (let name in names){
-          for(let cart in this.cartItems){
-            if(name === cart){
-              console.log(cart);
-              // this.cartItems.splice(cart, 1);
-              // console.log(this.cartItems);
-              // console.log(this.cartItems);
-              // console.log(removedItem);
-              // var newCartItems = delete this.cartItems[cart];              // console.log(this.cartItems);
-              // localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
-            }
-          }
-        }
 
-}
   removeItem(){
+    var id = this.getCardId();
     var removeBtns = document.querySelectorAll('.remove');
     var container = document.querySelectorAll('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
       btn.parentElement.remove();
-      this.removeItemFromLocalStorage();
-      this.totalCart();
-      this.cartIcon();
-      // localStorage.removeItem('cart-items', this.cartItems.splice(this.camData, this.camData));
-      // need to remove item from localStorage
-    }));
-}
+      var itemIndex = -1;
+      for (let i = 0; i < this.cartItems.length; i++){
+        if(this.cartItems[i]._id === id){
+          itemIndex = i;
+          break;
+        }
+      }
+        if(itemIndex > -1){
+          this.cartItems.splice(itemIndex, 1);
+          localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+        }
+        this.showCart();
+
+        this.totalCart();
+      }));
+  }
+
+  getCardId(){
+    var nameElt = document.querySelector(".name");
+    var id = nameElt.dataset.id;
+    return id;
+  }
 
   incrementQuantity(){
       var quantities = document.querySelectorAll('.quantity');
@@ -252,26 +255,19 @@ removeItemFromLocalStorage(){
 
     var totalElt = document.querySelector('.total-cart');
     totalElt.innerText = total;
+    var counterIcon = document.querySelector('.nav-counter');
+    counterIcon.innerText = this.cartIcon();
 }
 
-// updateCartIcon (){
-//   var counter = 0;
-//   var cartElt = document.querySelector('.nav-counter');
-//   cartElt.innerText = counter + 1;
-//   localStorage.setItem('cart-icon', cartElt.innerText);
-// }
 
 cartIcon(){
   var camInCart = document.querySelectorAll('.content');
-  var counterIcon = document.querySelector('.nav-counter');
-  counterIcon.textContent = camInCart.length;
-  localStorage.setItem('cart-icon', counterIcon.innerText);
+  var numberOfCameras = camInCart.length;
+  console.log(numberOfCameras);
+  return numberOfCameras;
 }
 
-getCartIcon(){
-  var cartElt = document.querySelector('.nav-counter');
-  cartElt.innerText = localStorage.getItem("cart-icon");
-}
+
 
 //display the cameras choosen by the user and the form to submit the order
   displayCart(){
