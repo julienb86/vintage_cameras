@@ -298,7 +298,6 @@ cartIcon(){
     let submit = document.getElementById("submit-btn");
       submit.addEventListener("click", (e)=> {
       e.preventDefault();
-      this.urlConfirmPage();
     const form = 
     {
       contact : {
@@ -313,8 +312,10 @@ cartIcon(){
 
     };
     this.makeRequest(form);
+    
   });
 }
+
 
 
 
@@ -328,26 +329,37 @@ cartIcon(){
     };
     const response = await fetch("http://localhost:3000/api/cameras/order", options);
 
-    const datas = response.json();
-    console.log(datas);
+    const datas = await response.json();
+
+    this.displayOrder(datas);
   }
 
+
+  urlConfirmPage(){
+    let url = window.location.search;
+    const newUrl = new URLSearchParams(url);
+    return newUrl.set("page", "confirm.html");
+  }
+
+
   displayOrder(post){
-     const productsElt = document.querySelector(".products");
+     const confirmElt = document.querySelector(".confirm");
      let html = "";
      const orderHtml = 
      `
-      <p>${post.orderId}</p>
+     <p>Thank you ${post.contact.firstName} ${post.contact.lastName} for your order</p>
+
+      <p>Here is your id confirmation : ${post.orderId}</p>
+
+      <a href="../index.html" class="btn">Continue Shopping</a>
 
      `
      html += orderHtml;
-     productsElt.innerHTML = html;
+     confirmElt.innerHTML = html;
   }
 
 
   async getOrder(){
-    var data = this.userData();
-    var post = await this.makeRequest(data);
-/*     this.displayOrder(post); */
+   this.userData();
   }
 }
