@@ -200,9 +200,7 @@ class Cart{
   removeItem(){
     var id = this.getCardId();
     var removeBtns = document.querySelectorAll('.remove');
-    var container = document.querySelectorAll('.content');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
-      btn.parentElement.remove();
       var itemIndex = -1;
       for (let i = 0; i < this.cartItems.length; i++){
         if(this.cartItems[i]._id === id){
@@ -271,7 +269,6 @@ cartIcon(){
     this.removeItem();
     this.incrementQuantity();
     this.totalCart();
-
   }
 
 
@@ -292,31 +289,65 @@ cartIcon(){
     }
 
 //   // when the users clicks on submit button it returns an object with the users info.
-    userData(){
-      let inputLastName = document.getElementById('inputLastName');
-      let inputFirstName = document.getElementById('inputFirstName');
-      let inputAddress = document.getElementById('inputAddress');
-      let inputCity = document.getElementById('inputCity');
-      let inputEmail = document.getElementById('inputEmail');
-      let submit = document.getElementById("submit-btn");
-        submit.addEventListener("click", (e)=> {
-        e.preventDefault();
-      const form = 
-      {
-        contact : {
-          firstName: inputFirstName.value,
-          lastName: inputLastName.value,
-          address: inputAddress.value,
-          city: inputCity.value,
-          email: inputEmail.value
-        },
-        products : {
-          id: this.arrayOfIds()
-        }
-      };
-      console.log(form);
+  userData(){
+    let inputLastName = document.getElementById('inputLastName');
+    let inputFirstName = document.getElementById('inputFirstName');
+    let inputAddress = document.getElementById('inputAddress');
+    let inputCity = document.getElementById('inputCity');
+    let inputEmail = document.getElementById('inputEmail');
+    let submit = document.getElementById("submit-btn");
+      submit.addEventListener("click", (e)=> {
+      e.preventDefault();
+      this.urlConfirmPage();
+    const form = 
+    {
+      contact : {
+        firstName: inputFirstName.value,
+        lastName: inputLastName.value,
+        address: inputAddress.value,
+        city: inputCity.value,
+        email: inputEmail.value
+      },
+      
+       products: this.arrayOfIds()
+
+    };
+    this.makeRequest(form);
   });
 }
 
 
+
+  async makeRequest(data){
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    const options = {
+      method: "POST",
+      headers,
+      body: JSON.stringify(data),
+    };
+    const response = await fetch("http://localhost:3000/api/cameras/order", options);
+
+    const datas = response.json();
+    console.log(datas);
+  }
+
+  displayOrder(post){
+     const productsElt = document.querySelector(".products");
+     let html = "";
+     const orderHtml = 
+     `
+      <p>${post.orderId}</p>
+
+     `
+     html += orderHtml;
+     productsElt.innerHTML = html;
+  }
+
+
+  async getOrder(){
+    var data = this.userData();
+    var post = await this.makeRequest(data);
+/*     this.displayOrder(post); */
+  }
 }
