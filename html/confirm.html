@@ -22,59 +22,16 @@
   <!-- PRODUCTS -->
 
   <div class="container products">
-    <div class="title text-center">
-      <h3>CART</h3>
-    </div>
+    <p class="content"></p>
 
-
-    <div class="row cart-items">
-<!-- cards chosen by the user -->
-    </div>
-
-
-  </div>
-  <div class="total row d-flex justify-content-center">
-    <p>Total: <span class="total-cart">$ 0</span></p>
-  </div>
-
-  <form>
-    <div class="form-row row">
-      <div class="form-group col-md-6">
-        <label for="inputLastName">Last Name</label>
-        <input type="text" autofocus="autofocus" class="form-control" id="inputLastName" minlength="3" placeholder="Last Name" required>
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputFirstName">First Name</label>
-        <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
-      </div>
-      <div class="form-group col-md-12">
-        <label for="inputEmail">Email</label>
-        <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
-      </div>
-      <div class="form-group col-md-12">
-        <label for="inputAddress">Address</label>
-        <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputCity">City</label>
-        <input type="text" class="form-control" id="inputCity" minlength="3" placeholder="City" required>
-      </div>
-      <div class="form-group col-md-3">
-        <label for="inputZip">ZIP</label>
-        <input type="text" class="form-control" id="inputZip"  placeholder="ZIP" required>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary btn-lg offset-md-5" id="submit-btn">Submit</button>
-  </form>
-  <!-- END PRODUCTS -->
+  
 
   </div>
 <script type="text/javascript" src="../js/essai1.js"></script>
 <script type="text/javascript">
 var cart = new Cart();
-
-cart.displayCart();
 cart.getOrder();
+
 </script>
 
 
@@ -82,4 +39,3 @@ cart.getOrder();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </body>
-</html>

@@ -34,6 +34,8 @@ class DisplayCameras{
       products.innerHTML = html;
       var counterIcon = document.querySelector('.nav-counter');
       counterIcon.innerText = cart.cartIcon();
+      console.log(cart.cartIcon());
+      
   }
 
   async getData(){
@@ -77,7 +79,6 @@ class DisplayCameras{
       const products = document.querySelector(this.productClass);
        products.innerHTML = html;
     }
-
 
 // return the lenses
   async numberOfLenses(){
@@ -151,10 +152,10 @@ class Cart{
       this.message();
       localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
     }
-}
+  }
 
 
-  // Function setTimeout
+  // Function setTimeout when a card is added to the cart
   message(){
     var body = document.querySelector('.card-footer');
     var message = document.createElement("p");
@@ -191,9 +192,7 @@ class Cart{
     const products = document.querySelector('.products');
     var cartItems = document.querySelector('.cart-items');
     products.appendChild(cartItems);
-
     cartItems.innerHTML = html;
-
   }
 
 
@@ -217,11 +216,10 @@ class Cart{
           this.totalCart();
           this.displayCart();
         }
-
       }));
+    }
 
-  }
-
+  /* get the id of the camera */
   getCardId(){
     var nameElt = document.querySelector(".name");
     var id = nameElt.dataset.id;
@@ -237,8 +235,7 @@ class Cart{
         }
         this.totalCart();
       }));
-
-  }
+    }
 
 // update the total element
   totalCart(){
@@ -253,17 +250,16 @@ class Cart{
       var quantity = quantities.value;
       total += (newPrice * quantity);
     }
-
     var totalElt = document.querySelector('.total-cart');
     totalElt.innerText = "$ " + total;
     var counterIcon = document.querySelector('.nav-counter');
     counterIcon.innerText = this.cartIcon();
-}
+  }
 
 
+/* get the number of cameras in the html */
 cartIcon(){
-  var camInCart = document.querySelectorAll('.content');
-  var numberOfCameras = camInCart.length;
+  var numberOfCameras = this.cartItems.length;
   return numberOfCameras;
 }
 
@@ -275,7 +271,7 @@ cartIcon(){
     this.removeItem();
     this.incrementQuantity();
     this.totalCart();
-    this.cartIcon();
+
   }
 
 
@@ -284,6 +280,16 @@ cartIcon(){
 // ////////////////////////POST REQUEST FOR THE ORDER PAGE//////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
+    /* array of the ids */
+    arrayOfIds(){
+      let productsArray = [];
+      let items = this.cartItems;
+      for (let item of items){
+        let id = (item._id);
+        productsArray.push(id);
+      }
+      return productsArray; 
+    }
 
 //   // when the users clicks on submit button it returns an object with the users info.
     userData(){
@@ -295,80 +301,22 @@ cartIcon(){
       let submit = document.getElementById("submit-btn");
         submit.addEventListener("click", (e)=> {
         e.preventDefault();
-    const form = {
-      firstName: inputFirstName.value,
-      lastName: inputLastName.value,
-      address: inputAddress.value,
-      city: inputCity.value,
-      email: inputEmail.value
-      // const arrayProducts = []; id of the products: strings
-    }
-    this.makeRequest(form);
+      const form = 
+      {
+        contact : {
+          firstName: inputFirstName.value,
+          lastName: inputLastName.value,
+          address: inputAddress.value,
+          city: inputCity.value,
+          email: inputEmail.value
+        },
+        products : {
+          id: this.arrayOfIds()
+        }
+      };
+      console.log(form);
   });
 }
 
-  makeRequest(data){
-    return new Promise((resolve, reject)=>{
-      let request = new XMLHttpRequest();
-      request.open('POST', "http://localhost:3000/api/cameras/order");
-      request.onreadystatechange = () =>{
-        if(request.readyState === 4){
-          if(request.status === 201){
-            resolve(JSON.parse(request.response));
-          }else{
-          reject(JSON.parse(request.response));
-          }
-        }
-      };
-      request.setRequestHeader('Content-Type', 'application/json');
-      request.send(JSON.stringify(data));
-    });
-  }
 
-
-// it sends post info from the user to the server
- // makeRequest(data){
-
- //      const settings = {
- //      method: 'POST',
- //      headers: {
- //          Accept: 'application/json',
- //          'Content-Type': 'application/json',
- //      }
- // body
- //    }
- //      let response = fetch(url + "order", settings );
- //      let data = response.json();
- //      return data;
- //  }
-
-
-// get the data back from the server
-  async submitFormData(post){
-    try{
-      const requestPromise = this.makeRequest(post);
-      const response = await requestPromise;
-      this.displayOrder(response);
-      console.log(this.displayOrder(response));
-    }catch(errorResponse){
-      console.log(errorResponse);
-    }
-  }
-
-  // display the data from the server
-  displayOrder(data){
-    let html = "";
-    let orderHtml =
-    `<div>
-      <p>${data.email}</p>
-    </div>`;
-    html += orderHtml;
-    const products = document.querySelector('.products');
-    products.innerHTML = html;
-  }
-
-  async getOrder(){
-    await this.submitFormData();
-    this.displayOrder();
-  }
 }
