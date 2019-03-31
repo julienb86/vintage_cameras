@@ -1,4 +1,6 @@
 let url = "http://localhost:3000/api/cameras/";
+
+
 class DisplayCameras{
   constructor(productClass){
     this.productClass = productClass;
@@ -31,16 +33,14 @@ class DisplayCameras{
       html+= cardHtml;
     }
       const products = document.querySelector(this.productClass);
-      products.innerHTML = html;
-      var counterIcon = document.querySelector('.nav-counter');
-      counterIcon.innerText = cart.cartIcon();
-      console.log(cart.cartIcon());
-      
+      products.innerHTML = html;    
   }
 
   async getData(){
     let cameras = await this.fetchData();
     this.init(cameras);
+    var counterIcon = document.querySelector('.nav-counter');
+    counterIcon.innerText = cart.cartIcon(); 
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,6 +109,7 @@ class DisplayCameras{
       e.preventDefault();
       var cart = new Cart();
       cart.addItem(this1.camData);
+      window.location.reload();
     });
   }
 
@@ -119,7 +120,8 @@ class DisplayCameras{
       this.camData = getDetails;
       this.displayOneCam(getDetails);
       this.addBtnListener();
-      cart.cartIcon();
+      var counterIcon = document.querySelector('.nav-counter');
+      counterIcon.innerText = cart.cartIcon(); 
     }
 }
 
@@ -257,8 +259,15 @@ class Cart{
 
 /* get the number of cameras in the html */
 cartIcon(){
-  var numberOfCameras = this.cartItems.length;
-  return numberOfCameras;
+/*   var numberOfCameras = this.cartItems.length;
+  return numberOfCameras; */
+
+  var itemsInCart = localStorage.getItem('cart-items');
+  var json = JSON.parse(itemsInCart);
+  return json.length;
+   
+
+  
 }
 
 
@@ -289,7 +298,8 @@ cartIcon(){
     }
 
 //   // when the users clicks on submit button it returns an object with the users info.
-  userData(){
+   userData(){
+    
     let inputLastName = document.getElementById('inputLastName');
     let inputFirstName = document.getElementById('inputFirstName');
     let inputAddress = document.getElementById('inputAddress');
@@ -312,12 +322,12 @@ cartIcon(){
 
     };
     this.makeRequest(form);
+/*     console.log(response);
     
+    var datas = response.json(); 
+    this.displayOrder(datas);  */
   });
 }
-
-
-
 
   async makeRequest(data){
     const headers = new Headers();
@@ -326,8 +336,10 @@ cartIcon(){
       method: "POST",
       headers,
       body: JSON.stringify(data),
+      redirected: window.location = "confirm.html",
     };
     const response = await fetch("http://localhost:3000/api/cameras/order", options);
+    console.log(response);
 
     const datas = await response.json();
 
