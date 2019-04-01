@@ -259,15 +259,9 @@ class Cart{
 
 /* get the number of cameras in the html */
 cartIcon(){
-/*   var numberOfCameras = this.cartItems.length;
-  return numberOfCameras; */
-
   var itemsInCart = localStorage.getItem('cart-items');
   var json = JSON.parse(itemsInCart);
   return json.length;
-   
-
-  
 }
 
 
@@ -298,8 +292,7 @@ cartIcon(){
     }
 
 //   // when the users clicks on submit button it returns an object with the users info.
-   userData(){
-    
+  userData(){ 
     let inputLastName = document.getElementById('inputLastName');
     let inputFirstName = document.getElementById('inputFirstName');
     let inputAddress = document.getElementById('inputAddress');
@@ -308,7 +301,7 @@ cartIcon(){
     let submit = document.getElementById("submit-btn");
       submit.addEventListener("click", (e)=> {
       e.preventDefault();
-    const form = 
+    var form = 
     {
       contact : {
         firstName: inputFirstName.value,
@@ -321,49 +314,50 @@ cartIcon(){
        products: this.arrayOfIds()
 
     };
-    this.makeRequest(form);
-/*     console.log(response);
-    
-    var datas = response.json(); 
-    this.displayOrder(datas);  */
+    var formUser = this.makeRequest(form);
+    this.displayOrder(formUser);
   });
 }
 
   async makeRequest(data){
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    const options = {
-      method: "POST",
-      headers,
-      body: JSON.stringify(data),
-      redirected: window.location = "confirm.html",
-    };
-    const response = await fetch("http://localhost:3000/api/cameras/order", options);
-    console.log(response);
+    try{
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      const options = {
+        method: "POST",
+        headers,
+        body: JSON.stringify(data),
+      };
 
-    const datas = await response.json();
+      let response = await fetch("http://localhost:3000/api/cameras/order", options);
 
-    this.displayOrder(datas);
+      const datas = await response.json();
+      
+      return datas;
+      /* this.displayOrder(datas); */
+    }catch (error){
+      console.log(error);    
+    }
   }
 
-
-  urlConfirmPage(){
-    let url = window.location.search;
-    const newUrl = new URLSearchParams(url);
-    return newUrl.set("page", "confirm.html");
+  redirectToConfirmPage(orderResponse){
+    let confirmUrl = "confirm.html?price=";
+    let usp = new URLSearchParams(confirmUrl);
+    /* usp.set("price", "15"); */
+    window.location = confirmUrl;
+    
   }
-
 
   displayOrder(post){
-     const confirmElt = document.querySelector(".confirm");
+    const confirmElt = document.querySelector(".confirm");
      let html = "";
      const orderHtml = 
      `
      <p>Thank you ${post.contact.firstName} ${post.contact.lastName} for your order</p>
 
-      <p>Here is your id confirmation : ${post.orderId}</p>
+     <p>Here is your id confirmation : ${post.orderId}</p>
 
-      <a href="../index.html" class="btn">Continue Shopping</a>
+     <a href="../index.html" class="btn">Continue Shopping</a>
 
      `
      html += orderHtml;
@@ -371,7 +365,7 @@ cartIcon(){
   }
 
 
-  async getOrder(){
-   this.userData();
+ getOrder(){
+    this.userData();
   }
 }
