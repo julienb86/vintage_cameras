@@ -22,27 +22,28 @@ class DisplayCameras{
     for (let camera of cameras){
       let cardHtml =
       `
-        <div class="card">
-        <a href="html/product.html?id=${camera._id}">
-          <img src="${camera.imageUrl}" alt="camera1">
-          <div class="card-name d-flex flex-column align-items-center">
-            <h2 class="text-center">${camera.name}</h2>
-            <p>$ ${camera.price/100}</p>
-        
-        </div>
+      <div class="card" style="width: 18rem;">
+        <a href="html/product.html?id=${camera._id}" class="link text-decoration-none">
+        <img src="${camera.imageUrl}" class="card-img-top" alt="product-img">
+        <div class="card-body">
+          <h5 class="card-title card-name d-flex flex-column align-items-center">${camera.name}</h5>
+          <p class="card-text text-center">$ ${camera.price/100}</p>
         </a>
-        </div>`;
+        </div>
+      </div>
+
+`;
       html+= cardHtml;
     }
       const products = document.querySelector(this.productClass);
-      products.innerHTML = html;    
+      products.innerHTML = html;
   }
 
   async getData(){
     let cameras = await this.fetchData();
     this.init(cameras);
     var counterIcon = document.querySelector('.nav-counter');
-    counterIcon.innerText = cart.cartIcon(); 
+    counterIcon.innerText = cart.cartIcon();
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,20 +63,22 @@ class DisplayCameras{
       let html = "";
       let cardHtml =
       `
-        <div class="card">
-          <img src="${getDetail.imageUrl}" alt="camera1">
-            <div class="card-body">
-              <h2 class="name">${getDetail.name}</h2>
-              <p class="price">$ ${getDetail.price/100}</p>
-              <h4>Description</h4>
-              <p>${getDetail.description}</p>
-              <label for="lenses">Choose a lense </label>
-                <select id="lenses"></select>
-            </div>
-            <div class="card-footer">
-              <button class="linkCart btn">Add To Cart</button>
-            </div>
-        </div>`;
+      <div class="card" style="width: 25rem;">
+        <img src="${getDetail.imageUrl}" class="card-img-top" alt="camera1">
+        <div class="card-body">
+          <h2 class="card-title name">${getDetail.name}</h2>
+          <p class="card-text price">$ ${getDetail.price/100}</p>
+          <h4>Description</h4>
+          <p>${getDetail.description}</p>
+          <label for="lenses">Choose a lense </label>
+            <select id="lenses"></select>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+          <button class="linkCart btn ">Add To Cart</button>
+        </div>
+      </div>
+
+        `;
 
       html+= cardHtml;
       const products = document.querySelector(this.productClass);
@@ -123,7 +126,7 @@ class DisplayCameras{
       this.displayOneCam(getDetails);
       this.addBtnListener();
       var counterIcon = document.querySelector('.nav-counter');
-      counterIcon.innerText = cart.cartIcon(); 
+      counterIcon.innerText = cart.cartIcon();
     }
 }
 
@@ -181,15 +184,17 @@ class Cart{
     this.cartItems.forEach(item => {
       let cart =
       `
-        <div class="row content d-flex align-items-center">
-          <img class="col-2" src="${item.imageUrl}" height="75" width="75"/>
-          <p class="col-1 name">${item.name}</p>
-          <div class="col-4">
-            <p class="price col-3">$ ${item.price/100}</p>
-          </div>
-          <input class="quantity col-2" type="number" value="1"/>
-          <button data-id="${item._id}" class="remove btn">Remove</button>
-        </div>
+        <div class="card content col-sm-12 col-md-3">
+           <img src="${item.imageUrl}" class="card-img-top" >
+           <div class="card-body">
+             <h5 class="card-title name">${item.name}</h5>
+             <p class="card-text price">$ ${item.price/100}</p>
+             <input class="quantity col-4" type="number" value="1"/>
+           </div>
+           <div class="card-footer">
+              <button data-id="${item._id}" class="remove btn">Remove</button>
+           </div>
+         </div>
       `
             html+=cart;
     });
@@ -286,11 +291,11 @@ cartIcon(){
         let id = item._id;
         productsArray.push(id);
       }
-      return productsArray; 
+      return productsArray;
     }
 
-//   
-  userData(){ 
+//
+  userData(){
     let submit = document.getElementById("submit-btn");
     let cartThis = this;
 
@@ -301,7 +306,7 @@ cartIcon(){
         let inputCity = document.getElementById('inputCity');
         let inputEmail = document.getElementById('inputEmail');
       e.preventDefault();
-    var form = 
+    var form =
     {
       contact : {
         firstName: inputFirstName.value,
@@ -310,13 +315,11 @@ cartIcon(){
         city: inputCity.value,
         email: inputEmail.value
       },
-      
+
        products: cartThis.arrayOfIds()
 
     };
     let formUser = await cartThis.makeRequest(form);
-    console.log(formUser);
-  
     cartThis.redirectToConfirmPage(formUser);
   });
 }
@@ -330,15 +333,11 @@ cartIcon(){
         headers,
         body: JSON.stringify(data),
       };
-
       let response = await fetch("http://localhost:3000/api/cameras/order", options);
-
       const datas = await response.json();
-      
       return datas;
-
     }catch (error){
-      console.log(error);    
+      console.log(error);
     }
   }
 

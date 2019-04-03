@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,gBAAgB;EACd,OAAO,EAAE,CAAC;EACV,wBAAO;IACL,gBAAgB,ECHV,OAAO;IDIb,kCAAS;MACP,KAAK,ECHE,OAAO;MDId,cAAc,EAAE,UAAU;IAE5B,0CAAkB;MAChB,KAAK,EAAE,KAAK;MACZ,SAAS,EAAE,MAAM;MACjB,QAAQ,EAAE,QAAQ;MAClB,uDAAY;QACV,QAAQ,EAAE,QAAQ;QAClB,GAAG,EAAE,KAAK;QACV,KAAK,ECbA,OAAO",
-"sources": ["_navbar.scss","../utils/_variables.scss"],
-"names": [],
-"file": "_navbar.css"
-}

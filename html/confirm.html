@@ -14,30 +14,26 @@
   <title>Vintage Products</title>
 </head>
 <body>
-  <div class="container-fluid">
-    <nav class="navbar navbar-light navbar-expand-xl">
-            <a class="nav-link" href="../index.html">Home</a>
-          <a href="#" class="nav-link" id="cart-counter"><i class="fas fa-shopping-cart"><span class="nav-counter">0</span></i></a>
-    </nav>
+  <div class="container-fluid d-flex justify-content-center">
   <!-- PRODUCTS -->
-
-  <div class="container confirm">
-    <p>Thank you  for your order</p>
-
-    <p>Here is your id confirmation : <span id="orderIdSpan"></span> </p>
-
-    <a href="../index.html" class="btn">Continue Shopping</a>
-
-  
-
+  <div class="card col-sm-12 col-md-4 confirm">
+    <img src="../img/thankYou.jpg" class="card-img-top">
+    <div class="card-body">
+      <h3 class="card-title">Your order has been successfully proceeded.</h3>
+      <p class="card-text">Here is your id confirmation : </p>
+      <p class="card-text" id="orderIdSpan"></p>.
+      <a href="../index.html" class="btn btn-primary">Continue Shopping</a>
+    </div>
   </div>
+
+
+
 <script type="text/javascript">
     let url = window.location.search;
     let usp = new URLSearchParams(url);
     let orderId = usp.get("orderId");
     let id = document.getElementById("orderIdSpan");
     id.textContent = orderId;
-
 </script>
 
 
