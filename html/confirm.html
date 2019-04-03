@@ -22,15 +22,22 @@
   <!-- PRODUCTS -->
 
   <div class="container confirm">
-    
+    <p>Thank you  for your order</p>
+
+    <p>Here is your id confirmation : <span id="orderIdSpan"></span> </p>
+
+    <a href="../index.html" class="btn">Continue Shopping</a>
 
   
 
   </div>
-<script type="text/javascript" src="../js/essai1.js"></script>
 <script type="text/javascript">
-var cart = new Cart();
-cart.getOrder();
+    let url = window.location.search;
+    let usp = new URLSearchParams(url);
+    let orderId = usp.get("orderId");
+    let id = document.getElementById("orderIdSpan");
+    id.textContent = orderId;
+
 </script>
 
 

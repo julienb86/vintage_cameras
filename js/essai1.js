@@ -23,12 +23,14 @@ class DisplayCameras{
       let cardHtml =
       `
         <div class="card">
+        <a href="html/product.html?id=${camera._id}">
           <img src="${camera.imageUrl}" alt="camera1">
           <div class="card-name d-flex flex-column align-items-center">
             <h2 class="text-center">${camera.name}</h2>
             <p>$ ${camera.price/100}</p>
-            <a href="html/product.html?id=${camera._id}" class="btn">Details</a>
-          </div>
+        
+        </div>
+        </a>
         </div>`;
       html+= cardHtml;
     }
@@ -181,30 +183,30 @@ class Cart{
       `
         <div class="row content d-flex align-items-center">
           <img class="col-2" src="${item.imageUrl}" height="75" width="75"/>
-          <p class="col-1 name" data-id="${item._id}">${item.name}</p>
+          <p class="col-1 name">${item.name}</p>
           <div class="col-4">
             <p class="price col-3">$ ${item.price/100}</p>
           </div>
           <input class="quantity col-2" type="number" value="1"/>
-          <button class="remove btn">Remove</button>
+          <button data-id="${item._id}" class="remove btn">Remove</button>
         </div>
       `
             html+=cart;
     });
-    const products = document.querySelector('.products');
     var cartItems = document.querySelector('.cart-items');
-    products.appendChild(cartItems);
     cartItems.innerHTML = html;
   }
 
 
 /* remove item */
   removeItem(){
-    var id = this.getCardId();
-    var removeBtns = document.querySelectorAll('.remove');
+/*     var id = this.getCardId(); */
+    let removeBtns = document.querySelectorAll('.remove');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
+      let id = btn.dataset.id;
       var itemIndex = -1;
       for (let i = 0; i < this.cartItems.length; i++){
+
         if(this.cartItems[i]._id === id){
           itemIndex = i;
           break;
@@ -218,13 +220,6 @@ class Cart{
         }
       }));
     }
-
-  /* get the id of the camera */
-  getCardId(){
-    var nameElt = document.querySelector(".name");
-    var id = nameElt.dataset.id;
-    return id;
-  }
 
   incrementQuantity(){
       var quantities = document.querySelectorAll('.quantity');
@@ -249,6 +244,9 @@ class Cart{
       var quantities = card.querySelector('.quantity');
       var quantity = quantities.value;
       total += (newPrice * quantity);
+      if(this.cartItems <= 0){
+        total = 0;
+      }
     }
     var totalElt = document.querySelector('.total-cart');
     totalElt.innerText = "$ " + total;
@@ -285,21 +283,23 @@ cartIcon(){
       let productsArray = [];
       let items = this.cartItems;
       for (let item of items){
-        let id = (item._id);
+        let id = item._id;
         productsArray.push(id);
       }
       return productsArray; 
     }
 
-//   // when the users clicks on submit button it returns an object with the users info.
+//   
   userData(){ 
-    let inputLastName = document.getElementById('inputLastName');
-    let inputFirstName = document.getElementById('inputFirstName');
-    let inputAddress = document.getElementById('inputAddress');
-    let inputCity = document.getElementById('inputCity');
-    let inputEmail = document.getElementById('inputEmail');
     let submit = document.getElementById("submit-btn");
-      submit.addEventListener("click", (e)=> {
+    let cartThis = this;
+
+      submit.addEventListener("click", async (e)=> {
+        let inputLastName = document.getElementById('inputLastName');
+        let inputFirstName = document.getElementById('inputFirstName');
+        let inputAddress = document.getElementById('inputAddress');
+        let inputCity = document.getElementById('inputCity');
+        let inputEmail = document.getElementById('inputEmail');
       e.preventDefault();
     var form = 
     {
@@ -311,11 +311,13 @@ cartIcon(){
         email: inputEmail.value
       },
       
-       products: this.arrayOfIds()
+       products: cartThis.arrayOfIds()
 
     };
-    var formUser = this.makeRequest(form);
-    this.displayOrder(formUser);
+    let formUser = await cartThis.makeRequest(form);
+    console.log(formUser);
+  
+    cartThis.redirectToConfirmPage(formUser);
   });
 }
 
@@ -334,35 +336,16 @@ cartIcon(){
       const datas = await response.json();
       
       return datas;
-      /* this.displayOrder(datas); */
+
     }catch (error){
       console.log(error);    
     }
   }
 
   redirectToConfirmPage(orderResponse){
-    let confirmUrl = "confirm.html?price=";
-    let usp = new URLSearchParams(confirmUrl);
-    /* usp.set("price", "15"); */
+    let confirmUrl = `confirm.html?orderId=${orderResponse.orderId}`;
     window.location = confirmUrl;
-    
-  }
-
-  displayOrder(post){
-    const confirmElt = document.querySelector(".confirm");
-     let html = "";
-     const orderHtml = 
-     `
-     <p>Thank you ${post.contact.firstName} ${post.contact.lastName} for your order</p>
-
-     <p>Here is your id confirmation : ${post.orderId}</p>
-
-     <a href="../index.html" class="btn">Continue Shopping</a>
-
-     `
-     html += orderHtml;
-     confirmElt.innerHTML = html;
-  }
+    }
 
 
  getOrder(){
