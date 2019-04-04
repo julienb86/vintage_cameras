@@ -82,6 +82,23 @@ opacity: 1;
   color: black;
 }
 
+.car-text{
+  font-size: 1.2rem;
+}
+
+.price{
+  font-size: 1.2rem;;
+}
+
+.quantity[type="number"]{
+  width: 100px;
+  height: 40px;
+  font-size: 1.2rem;
+}
+
+.name{
+  font-size: 1.1rem;
+}
 /* END LIST OF PRODUCTS */
 
 
@@ -95,3 +112,19 @@ opacity: 1;
   margin: 35px;
   font-size: 1.7rem;
 }
+
+.form-group label{
+  font-size: 1.2rem;
+}
+
+/* MESSAGE */
+/* 
+#message{
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: rgb(2, 112, 30);
+  margin: 0;
+  padding: 10px;
+  color: antiquewhite;
+}
+ */

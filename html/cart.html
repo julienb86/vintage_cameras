@@ -20,62 +20,50 @@
       <a href="#" class="nav-link" id="cart-counter"><i class="fas fa-shopping-cart"><span class="nav-counter">0</span></i></a>
     </nav>
   <!-- PRODUCTS -->
-
-  <div class="container products">
+  <div class="container">
     <div class="title text-center">
       <h3>CART</h3>
     </div>
-
-
-    <div class="card-deck cart-items">
-<!-- cards chosen by the user -->
+    <div class="row">
+  
+      <div class="card-deck cart-items col-md-8 col-sm-12">
+  <!-- cards chosen by the user -->
+      </div>
+  
+      <form class="col-md-4 col-sm-12">
+        <div>
+          <div class="form-group">
+            <input type="text" autofocus="autofocus" class="form-control" id="inputLastName" minlength="3" placeholder="Last Name" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
+          </div>
+          <div class="form-group">
+            <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="inputCity" minlength="3" placeholder="City" required>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="inputZip"  placeholder="ZIP" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg offset-5" id="submit-btn">Submit</button>
+      </form>
+  
     </div>
-
-
-  </div>
-  <div class="total row d-flex justify-content-center">
-    <p>Total: <span class="total-cart">$ 0</span></p>
-  </div>
-
-  <form>
-    <div class="form-row row">
-      <div class="form-group col-6">
-        <label for="inputLastName">Last Name</label>
-        <input type="text" autofocus="autofocus" class="form-control" id="inputLastName" minlength="3" placeholder="Last Name" required>
-      </div>
-      <div class="form-group col-6">
-        <label for="inputFirstName">First Name</label>
-        <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
-      </div>
-      <div class="form-group col-12">
-        <label for="inputEmail">Email</label>
-        <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
-      </div>
-      <div class="form-group col-12">
-        <label for="inputAddress">Address</label>
-        <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
-      </div>
-      <div class="form-group col-6">
-        <label for="inputCity">City</label>
-        <input type="text" class="form-control" id="inputCity" minlength="3" placeholder="City" required>
-      </div>
-      <div class="form-group col-3">
-        <label for="inputZip">ZIP</label>
-        <input type="text" class="form-control" id="inputZip"  placeholder="ZIP" required>
-      </div>
+    <div class="total row d-flex justify-content-center">
+      <p>Total: <span class="total-cart">$ 0</span></p>
     </div>
-    <button type="submit" class="btn btn-primary btn-lg offset-5" id="submit-btn">Submit</button>
-  </form>
+  </div>
+
+
+
+
   <!-- END PRODUCTS -->
-
-  <div class="confirm"></div>
-
-
-  </div>
-
-
-
-
 <script type="text/javascript" src="../js/essai1.js"></script>
 <script type="text/javascript">
 var cart = new Cart();

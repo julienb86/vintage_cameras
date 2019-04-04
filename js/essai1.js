@@ -63,21 +63,26 @@ class DisplayCameras{
       let html = "";
       let cardHtml =
       `
-      <div class="card" style="width: 25rem;">
-        <img src="${getDetail.imageUrl}" class="card-img-top" alt="camera1">
-        <div class="card-body">
-          <h2 class="card-title name">${getDetail.name}</h2>
-          <p class="card-text price">$ ${getDetail.price/100}</p>
-          <h4>Description</h4>
-          <p>${getDetail.description}</p>
-          <label for="lenses">Choose a lense </label>
-            <select id="lenses"></select>
+      <div class="card mb-3" style="max-width: 100%;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="${getDetail.imageUrl}" class="card-img" alt="camera1">
         </div>
-        <div class="card-footer d-flex justify-content-center">
-          <button class="linkCart btn ">Add To Cart</button>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title name">${getDetail.name}</h5>
+            <p class="card-text price">$ ${getDetail.price/100}</p>
+            <h4>Description</h4>
+            <p class="card-text">${getDetail.description}</p>
+            <label for="lenses">Choose a lense </label>
+            <select id="lenses"></select>
+          </div>
+          <div class="card-footer d-flex justify-content-center">
+           <button class="linkCart btn ">Add To Cart</button>
+          </div>
         </div>
       </div>
-
+    </div>
         `;
 
       html+= cardHtml;
@@ -156,18 +161,20 @@ class Cart{
     }
     if (!exist){
       this.cartItems.push(camData);
-      this.message();
+/*       this.message(); */
       localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
+
     }
   }
 
 
   // Function setTimeout when a card is added to the cart
   message(){
-    var body = document.querySelector('.card-footer');
+    var body = document.querySelector('body');
     var message = document.createElement("p");
-    message.textContent = "item has been added to your cart";
-    body.appendChild(message);
+    message.id = "message";
+    message.textContent = "the item has been successfully added to your cart";
+    body.insertAdjacentElement("beforeBegin", message);
     setTimeout(()=> {
       message.style.display = "none";
     }, 2000)
@@ -184,12 +191,12 @@ class Cart{
     this.cartItems.forEach(item => {
       let cart =
       `
-        <div class="card content col-sm-12 col-md-3">
-           <img src="${item.imageUrl}" class="card-img-top" >
+        <div class="card content">
+           <img src="${item.imageUrl}" class="card-img-top" style="max-width: 100%;" >
            <div class="card-body">
              <h5 class="card-title name">${item.name}</h5>
              <p class="card-text price">$ ${item.price/100}</p>
-             <input class="quantity col-4" type="number" value="1"/>
+             <input class="quantity col-12" type="number" value="1"/>
            </div>
            <div class="card-footer">
               <button data-id="${item._id}" class="remove btn">Remove</button>
