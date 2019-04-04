@@ -250,11 +250,6 @@ class Cart{
   }
 
 
-
-  getTotalPrice(){
-    
-  }
-
 /* get the number of cameras in the html */
 cartIcon(){
   const itemsInCart = localStorage.getItem('cart-items');
@@ -318,9 +313,14 @@ cartIcon(){
     /* Check if the form is complete */
     if(inputFirstName.value !== "" && inputLastName.value !== ""  && inputAddress.value !== "" && inputCity.value !== ""  && inputEmail.value !== ""){
       if (this.cartItems.length > 0){
-        /* if it is the case send the datas to confirm.html */
+       let pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+       if(pattern.test(inputEmail.value)){
         let formUser = await cartThis.makeRequest(form);
         cartThis.redirectToConfirmPage(formUser);
+       }else{
+         alert("Please enter a correct email address");
+       }
+
       }else{
         alert("Sorry, your cart is empty :(");
       }
