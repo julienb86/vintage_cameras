@@ -161,23 +161,9 @@ class Cart{
     }
     if (!exist){
       this.cartItems.push(camData);
-/*       this.message(); */
       localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
 
     }
-  }
-
-
-  // Function setTimeout when a card is added to the cart
-  message(){
-    let body = document.querySelector('body');
-    let message = document.createElement("p");
-    message.id = "message";
-    message.textContent = "the item has been successfully added to your cart";
-    body.insertAdjacentElement("beforeBegin", message);
-    setTimeout(()=> {
-      message.style.display = "none";
-    }, 2000)
   }
 
 
@@ -191,17 +177,14 @@ class Cart{
     this.cartItems.forEach(item => {
       let cart =
       `
-        <div class="card content">
-           <img src="${item.imageUrl}" class="card-img-top" style="max-width: 100%;" >
-           <div class="card-body">
-             <h5 class="card-title name">${item.name}</h5>
-             <p class="card-text price">$ ${item.price/100}</p>
-             <input class="quantity col-12" type="number" value="1"/>
-           </div>
-           <div class="card-footer">
-              <button data-id="${item._id}" class="remove btn">Remove</button>
-           </div>
-         </div>
+   <div class="content-items d-flex">
+      <img src="${item.imageUrl}" class="img" d-none d-xs-none>
+      <h5 class="name">${item.name}</h5>
+      <p class="price">$ ${item.price/100}</p>
+      <input class="quantity col-2 col-xs-1" type="number" value="1"/>
+      <button data-id="${item._id}" class="remove btn">Remove</button>
+    </div>
+
       `
             html+=cart;
     });
@@ -247,7 +230,7 @@ class Cart{
 // update the total element
   totalCart(){
     let container = document.querySelector('.cart-items');
-    let cards = container.querySelectorAll('.content');
+    let cards = container.querySelectorAll('.content-items');
     let total = 0;
     for(let card of cards){
       let prices = card.querySelector('.price');

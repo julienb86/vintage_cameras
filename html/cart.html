@@ -21,15 +21,18 @@
     </nav>
   <!-- PRODUCTS -->
   <div class="container">
-    <div class="title text-center">
-      <h3>CART</h3>
+    <div class="title-cart text-center">
+      <h3>Cart</h3>
     </div>
-    <div class="row">
-  
-      <div class="card-deck cart-items col-md-8 col-sm-12">
-  <!-- cards chosen by the user -->
-      </div>
-  
+    <div class="row items">
+        <div class="total col-8">
+            <p>Total: <span class="total-cart">$ 0</span></p>
+          </div>
+        <div class="cart-items col-md-8 col-sm-12">
+    <!-- cards chosen by the user -->
+    
+        </div>
+
       <form class="col-md-4 col-sm-12">
         <div>
           <div class="form-group">
@@ -39,7 +42,7 @@
             <input type="text" class="form-control" id="inputFirstName" minlength="3" placeholder="First Name" required>
           </div>
           <div class="form-group">
-            <input type="text"  class="form-control" id="inputEmail" placeholder="Email" required>
+            <input type="email"  class="form-control" id="inputEmail" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="inputAddress" minlength="3" placeholder="32st 32th" required>
@@ -55,19 +58,13 @@
       </form>
   
     </div>
-    <div class="total row d-flex justify-content-center">
-      <p>Total: <span class="total-cart">$ 0</span></p>
-    </div>
   </div>
-
-
 
 
   <!-- END PRODUCTS -->
 <script type="text/javascript" src="../js/essai1.js"></script>
 <script type="text/javascript">
 var cart = new Cart();
-
 cart.displayCart();
 cart.getOrder();
 </script>
