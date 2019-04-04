@@ -170,8 +170,8 @@ class Cart{
 
   // Function setTimeout when a card is added to the cart
   message(){
-    var body = document.querySelector('body');
-    var message = document.createElement("p");
+    let body = document.querySelector('body');
+    let message = document.createElement("p");
     message.id = "message";
     message.textContent = "the item has been successfully added to your cart";
     body.insertAdjacentElement("beforeBegin", message);
@@ -205,7 +205,7 @@ class Cart{
       `
             html+=cart;
     });
-    var cartItems = document.querySelector('.cart-items');
+    let cartItems = document.querySelector('.cart-items');
     cartItems.innerHTML = html;
   }
 
@@ -216,7 +216,7 @@ class Cart{
     let removeBtns = document.querySelectorAll('.remove');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
       let id = btn.dataset.id;
-      var itemIndex = -1;
+      let itemIndex = -1;
       for (let i = 0; i < this.cartItems.length; i++){
 
         if(this.cartItems[i]._id === id){
@@ -246,31 +246,36 @@ class Cart{
 
 // update the total element
   totalCart(){
-    var container = document.querySelector('.cart-items');
-    var cards = container.querySelectorAll('.content');
-    var total = 0;
+    let container = document.querySelector('.cart-items');
+    let cards = container.querySelectorAll('.content');
+    let total = 0;
     for(let card of cards){
-      var prices = card.querySelector('.price');
-      var price = prices.textContent;
-      var newPrice = price.slice(1).trim();
-      var quantities = card.querySelector('.quantity');
-      var quantity = quantities.value;
+      let prices = card.querySelector('.price');
+      let price = prices.textContent;
+      let newPrice = price.slice(1).trim();
+      let quantities = card.querySelector('.quantity');
+      let quantity = quantities.value;
       total += (newPrice * quantity);
       if(this.cartItems <= 0){
         total = 0;
       }
     }
-    var totalElt = document.querySelector('.total-cart');
+    let totalElt = document.querySelector('.total-cart');
     totalElt.innerText = "$ " + total;
-    var counterIcon = document.querySelector('.nav-counter');
+    let counterIcon = document.querySelector('.nav-counter');
     counterIcon.innerText = this.cartIcon();
   }
 
 
+
+  getTotalPrice(){
+    
+  }
+
 /* get the number of cameras in the html */
 cartIcon(){
-  var itemsInCart = localStorage.getItem('cart-items');
-  var json = JSON.parse(itemsInCart);
+  const itemsInCart = localStorage.getItem('cart-items');
+  let json = JSON.parse(itemsInCart);
   return json.length;
 }
 
@@ -313,7 +318,7 @@ cartIcon(){
         let inputCity = document.getElementById('inputCity');
         let inputEmail = document.getElementById('inputEmail');
       e.preventDefault();
-    var form =
+    let form =
     {
       contact : {
         firstName: inputFirstName.value,
@@ -326,11 +331,23 @@ cartIcon(){
        products: cartThis.arrayOfIds()
 
     };
-    let formUser = await cartThis.makeRequest(form);
-    cartThis.redirectToConfirmPage(formUser);
+
+    /* Check if the form is complete */
+    if(inputFirstName.value !== "" && inputLastName.value !== ""  && inputAddress.value !== "" && inputCity.value !== ""  && inputEmail.value !== ""){
+      if (this.cartItems.length > 0){
+        /* if it is the case send the datas to confirm.html */
+        let formUser = await cartThis.makeRequest(form);
+        cartThis.redirectToConfirmPage(formUser);
+      }else{
+        alert("Sorry, your cart is empty :(");
+      }
+    }else{
+      alert("You need to fill in the form before submitting :)");
+    }
   });
 }
 
+/* Post request to the server */
   async makeRequest(data){
     try{
       const headers = new Headers();
