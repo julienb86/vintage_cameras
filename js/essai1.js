@@ -178,11 +178,11 @@ class Cart{
       let cart =
       `
    <div class="content-items d-flex">
-      <img src="${item.imageUrl}" class="img" d-none d-xs-none>
+      <img src="${item.imageUrl}" class="img d-none d-sm-block">
       <h5 class="name">${item.name}</h5>
       <p class="price">$ ${item.price/100}</p>
-      <input class="quantity col-2 col-xs-1" type="number" value="1"/>
-      <button data-id="${item._id}" class="remove btn">Remove</button>
+      <input class="quantity col-xs-1" type="number" value="1"/>
+      <button data-id="${item._id}" class="remove btn"><i class="fas fa-trash-alt"></i></button>
     </div>
 
       `
@@ -195,7 +195,6 @@ class Cart{
 
 /* remove item */
   removeItem(){
-/*     var id = this.getCardId(); */
     let removeBtns = document.querySelectorAll('.remove');
     removeBtns.forEach(btn => btn.addEventListener("click", ()=>{
       let id = btn.dataset.id;
@@ -295,6 +294,7 @@ cartIcon(){
         let inputAddress = document.getElementById('inputAddress');
         let inputCity = document.getElementById('inputCity');
         let inputEmail = document.getElementById('inputEmail');
+        let inputZip = document.getElementById('inputZip');
       e.preventDefault();
     let form =
     {
@@ -311,7 +311,7 @@ cartIcon(){
     };
 
     /* Check if the form is complete */
-    if(inputFirstName.value !== "" && inputLastName.value !== ""  && inputAddress.value !== "" && inputCity.value !== ""  && inputEmail.value !== ""){
+    if(inputFirstName.value !== "" && inputLastName.value !== ""  && inputAddress.value !== "" && inputCity.value !== ""  && inputEmail.value !== "" && inputZip.value !== ""){
       if (this.cartItems.length > 0){
        let pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
        if(pattern.test(inputEmail.value)){

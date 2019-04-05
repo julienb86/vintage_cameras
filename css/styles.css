@@ -115,30 +115,29 @@ opacity: 1;
 .content-items{
   height: 75px;
   align-items: center;
-  margin: 15px;
-  padding: 10px;
-  border-top: 1px solid;
+  border-bottom: 1px solid;
+  margin: 10px 0;
 }
 .price{
-  font-size: 1.2rem;
   margin-bottom: 0.5rem;
   margin-right: 10px;
+  font-size: 1rem;
 }
 
 .quantity[type="number"]{
-  width: 100px;
+  min-width: 40px;
+  max-width: 60px;
   height: 40px;
-  font-size: 1.2rem;
   margin-right: 10px;
+  font-size: 1.2rem;
 }
 
 .name{
-  font-size: 1.3rem;
-  flex: 1;
+  flex:1;
 }
 
 .title-cart{
-  margin: 30px;
+  margin-top: 30px;
   text-transform: uppercase;
 }
 
