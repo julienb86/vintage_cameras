@@ -144,3 +144,22 @@ opacity: 1;
 .cart-items{
   background-color: #c78800;
 }
+
+/* Message for the product page */
+.message{
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: rgb(2, 112, 30);
+  margin: 0;
+  padding: 10px;
+  color: antiquewhite;
+}
+
+.added{
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: rgb(201, 63, 63);
+  margin: 0;
+  padding: 10px;
+  color: antiquewhite;
+}

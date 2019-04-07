@@ -119,7 +119,9 @@ class DisplayCameras{
       e.preventDefault();
       var cart = new Cart();
       cart.addItem(this1.camData);
-      window.location.reload();
+      setInterval(()=>{
+        window.location.reload();
+      }, 2000);
     });
   }
 
@@ -154,19 +156,46 @@ class Cart{
     }
     for (let cart of this.cartItems){
       if (cart._id === camData._id){
-        alert("You have already added this camera to your cart :)");
+        this.messageWhenItemAlreadyStored();
         exist = true;
         break;
       }
     }
     if (!exist){
+      this.messageWhenItemAdded();
       this.cartItems.push(camData);
       localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
 
     }
   }
 
+  // Function setTimeout when a card is added to the cart
+  messageWhenItemAdded(){
+    var body = document.querySelector('.card-footer');
+    var body = document.querySelector('body');
+    var message = document.createElement("p");
+    message.classList.add ("message");
+    message.textContent = "the item has been successfully added to your cart";
+/*     body.insertAdjacentElement("beforeBegin", message);
 
+ */   
+    body.appendChild(message);
+     setTimeout(()=> {
+      message.style.display = "none";
+    }, 2000)
+  }
+
+  messageWhenItemAlreadyStored(){
+    var body = document.querySelector('.card-footer');
+    var body = document.querySelector('body');
+    var message = document.createElement("p");
+    message.classList.add("added");
+    message.textContent = "the item has already been added to your cart!";
+    body.insertAdjacentElement("beforeBegin", message);
+    setTimeout(()=> {
+      message.style.display = "none";
+    }, 2000)
+  }
 // display the cards
   showCart(){
     var jsonitems = localStorage.getItem('cart-items');
@@ -289,6 +318,8 @@ cartIcon(){
     let cartThis = this;
 
       submit.addEventListener("click", async (e)=> {
+        let formElt = document.querySelectorAll(".form-control");
+
         let inputLastName = document.getElementById('inputLastName');
         let inputFirstName = document.getElementById('inputFirstName');
         let inputAddress = document.getElementById('inputAddress');
@@ -312,11 +343,13 @@ cartIcon(){
 
     /* Check if the form is complete */
     if(inputFirstName.value !== "" && inputLastName.value !== ""  && inputAddress.value !== "" && inputCity.value !== ""  && inputEmail.value !== "" && inputZip.value !== ""){
+      formElt.forEach(formInput => formInput.classList.add("border", "border-success"));
       if (this.cartItems.length > 0){
        let pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
        if(pattern.test(inputEmail.value)){
         let formUser = await cartThis.makeRequest(form);
         cartThis.redirectToConfirmPage(formUser);
+        this.emptyCart();
        }else{
          alert("Please enter a correct email address");
        }
@@ -325,10 +358,16 @@ cartIcon(){
         alert("Sorry, your cart is empty :(");
       }
     }else{
-      alert("You need to fill in the form before submitting :)");
+      formElt.forEach(formInput => formInput.classList.add("border", "border-danger"));
     }
   });
 }
+
+
+/* Method to clear LS after a purchase */
+  emptyCart(){
+    localStorage.clear();
+  }
 
 /* Post request to the server */
   async makeRequest(data){
