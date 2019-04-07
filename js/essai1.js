@@ -11,7 +11,7 @@ class DisplayCameras{
        let response = await fetch(url);
        let data = await response.json();
        return data;
-     }catch{
+     }catch(error){
        console.log(error);
      }
    }
@@ -42,7 +42,7 @@ class DisplayCameras{
   async getData(){
     let cameras = await this.fetchData();
     this.init(cameras);
-    var counterIcon = document.querySelector('.nav-counter');
+    let counterIcon = document.querySelector('.nav-counter');
     counterIcon.innerText = cart.cartIcon();
     }
 
@@ -50,7 +50,7 @@ class DisplayCameras{
 
 // fetch the url with the id returned
    async fetchOneCam(){
-    var id = this.getUrlParams();
+    let id = this.getUrlParams();
     let response = await fetch(url + id);
     let info = await response.json();
     return info;
@@ -93,7 +93,7 @@ class DisplayCameras{
 // return the lenses
   async numberOfLenses(){
     let listHtml = "";
-    var camera = await this.fetchOneCam();
+    let camera = await this.fetchOneCam();
     for (let lense of camera.lenses){
       let lenseItem =
       `
@@ -107,17 +107,17 @@ class DisplayCameras{
 
   // Query parameter
   getUrlParams(){
-    var param = window.location.search;
-    var newUrl = new URLSearchParams(param);
+    let param = window.location.search;
+    let newUrl = new URLSearchParams(param);
     return newUrl.get("id");
   }
 
   addBtnListener(){
-    var this1 = this;
-    var btn = document.querySelector('.linkCart');
+    let this1 = this;
+    let btn = document.querySelector('.linkCart');
     btn.addEventListener("click", (e) => {
       e.preventDefault();
-      var cart = new Cart();
+      let cart = new Cart();
       cart.addItem(this1.camData);
       setInterval(()=>{
         window.location.reload();
@@ -128,11 +128,11 @@ class DisplayCameras{
 //
   // Display one camera in html
     async getDataOneCam(){
-      var getDetails = await this.fetchOneCam();
+      let getDetails = await this.fetchOneCam();
       this.camData = getDetails;
       this.displayOneCam(getDetails);
       this.addBtnListener();
-      var counterIcon = document.querySelector('.nav-counter');
+      let counterIcon = document.querySelector('.nav-counter');
       counterIcon.innerText = cart.cartIcon();
     }
 }
@@ -149,55 +149,30 @@ class Cart{
   }
 
   addItem(camData){
-    var items = localStorage.getItem('cart-items');
-    var exist = false;
+    let items = localStorage.getItem('cart-items');
+    let exist = false;
     if(items !== null){
       this.cartItems = JSON.parse(items);
     }
     for (let cart of this.cartItems){
       if (cart._id === camData._id){
-        this.messageWhenItemAlreadyStored();
+        this.message("body","The item has already been added to your cart!", "added" );
         exist = true;
         break;
       }
     }
     if (!exist){
-      this.messageWhenItemAdded();
+      this.message('body',"The item has been successfully added to your cart", "message");
       this.cartItems.push(camData);
       localStorage.setItem('cart-items', JSON.stringify(this.cartItems));
 
     }
   }
 
-  // Function setTimeout when a card is added to the cart
-  messageWhenItemAdded(){
-    var body = document.querySelector('.card-footer');
-    var body = document.querySelector('body');
-    var message = document.createElement("p");
-    message.classList.add ("message");
-    message.textContent = "the item has been successfully added to your cart";
-    body.appendChild(message);
-     setTimeout(()=> {
-      message.style.display = "none";
-    }, 2000)
-  }
-
-  messageWhenItemAlreadyStored(){
-    var body = document.querySelector('.card-footer');
-    var body = document.querySelector('body');
-    var message = document.createElement("p");
-    message.classList.add("added");
-    message.textContent = "the item has already been added to your cart!";
-    body.appendChild(message);
-    setTimeout(()=> {
-      message.style.display = "none";
-    }, 2000)
-  }
-
 
 // display the cards
   showCart(){
-    var jsonitems = localStorage.getItem('cart-items');
+    let jsonitems = localStorage.getItem('cart-items');
     if (jsonitems !== null) {
       this.cartItems = JSON.parse(jsonitems);
     }
@@ -244,9 +219,9 @@ class Cart{
     }
 
   incrementQuantity(){
-      var quantities = document.querySelectorAll('.quantity');
+      let quantities = document.querySelectorAll('.quantity');
       quantities.forEach(quantity => quantity.addEventListener('change', (e) =>{
-        var input = e.target;
+        let input = e.target;
         if(isNaN(input.value) || input.value <= 0){
             input.value = 1;
         }
@@ -317,8 +292,8 @@ cartIcon(){
     let cartThis = this;
 
       submit.addEventListener("click", async (e)=> {
-        let formElt = document.querySelectorAll(".form-control");
-
+        let inputs = document.querySelectorAll(".form-control");
+        
         let inputLastName = document.getElementById('inputLastName');
         let inputFirstName = document.getElementById('inputFirstName');
         let inputAddress = document.getElementById('inputAddress');
@@ -342,7 +317,6 @@ cartIcon(){
 
     /* Check if the form is complete */
     if(inputFirstName.value !== "" && inputLastName.value !== ""  && inputAddress.value !== "" && inputCity.value !== ""  && inputEmail.value !== "" && inputZip.value !== ""){
-      formElt.forEach(formInput => formInput.classList.add("border", "border-success"));
       if (this.cartItems.length > 0){
        let pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
        if(pattern.test(inputEmail.value)){
@@ -350,14 +324,14 @@ cartIcon(){
         cartThis.redirectToConfirmPage(formUser);
         this.emptyCart();
        }else{
-         alert("Please enter a correct email address");
+        this.message(".form-title", "your email address is incorrect, xxxx@xxxxx.xxx", "added");
        }
-
       }else{
-        alert("Sorry, your cart is empty :(");
+        this.message(".form-title", "Sorry, your cart is empty ", "added");
       }
     }else{
-      formElt.forEach(formInput => formInput.classList.add("border", "border-danger"));
+      
+      this.message(".form-title", "oops, you did not fill in the form", "added");
     }
   });
 }
@@ -395,4 +369,19 @@ cartIcon(){
  getOrder(){
     this.userData();
   }
+
+
+  /* message to inform the user */
+  message(elt, text, typeClass){
+    let textForm = document.querySelector(elt);
+    var message = document.createElement("p");
+    message.classList.add(typeClass);
+    message.textContent = text;
+    textForm.appendChild(message);
+    setTimeout(()=> {
+      message.style.display = "none";
+    }, 2000)
+  }
 }
+
+
