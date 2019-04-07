@@ -176,9 +176,6 @@ class Cart{
     var message = document.createElement("p");
     message.classList.add ("message");
     message.textContent = "the item has been successfully added to your cart";
-/*     body.insertAdjacentElement("beforeBegin", message);
-
- */   
     body.appendChild(message);
      setTimeout(()=> {
       message.style.display = "none";
@@ -191,11 +188,13 @@ class Cart{
     var message = document.createElement("p");
     message.classList.add("added");
     message.textContent = "the item has already been added to your cart!";
-    body.insertAdjacentElement("beforeBegin", message);
+    body.appendChild(message);
     setTimeout(()=> {
       message.style.display = "none";
     }, 2000)
   }
+
+
 // display the cards
   showCart(){
     var jsonitems = localStorage.getItem('cart-items');
