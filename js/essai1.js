@@ -28,8 +28,8 @@ class DisplayCameras{
         <div class="card-body">
           <h5 class="card-title card-name d-flex flex-column align-items-center">${camera.name}</h5>
           <p class="card-text text-center">$ ${camera.price/100}</p>
+          </div>
         </a>
-        </div>
       </div>
 
 `;
@@ -121,7 +121,7 @@ class DisplayCameras{
       cart.addItem(this1.camData);
       setInterval(()=>{
         window.location.reload();
-      }, 2000);
+      }, 1000);
     });
   }
 
